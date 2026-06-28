@@ -5,7 +5,7 @@
 <h1 align="center">climan</h1>
 <p align="center"><em>authoritative CLI docs agents can curl</em></p>
 <p align="center"><code>/pwsh</code> · 302 PowerShell 7.4 cmdlets · hybrid search</p>
-<p> no API key- just curl</p>
+<p align="center"> no API key- just curl</p>
 
 ---
 
