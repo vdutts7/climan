@@ -1,16 +1,15 @@
 /**
- * backdrop: interactive-grid — vanilla port of spoonfeeder InteractiveGrid.tsx
- * Auto-inits on [data-backdrop-interactive-grid] or .backdrop-interactive-grid
+ * backdrop: cursor-glow - soft radial glow follows pointer (replaces interactive dots)
+ * Auto-inits on [data-backdrop-cursor-glow] or .backdrop-cursor-glow
  */
 (function (global) {
   'use strict';
 
   var DEFAULTS = {
-    gridGap: 35,
-    dotSize: 1.2,
-    radius: 180,
-    color: 'rgba(100, 100, 100, 0.15)',
-    highlightColor: 'rgba(150, 150, 150, 0.45)'
+    size: 460,
+    color: '83, 144, 255',
+    opacity: 0.38,
+    blur: 52
   };
 
   function num(el, attr, fallback) {
@@ -19,116 +18,82 @@
   }
 
   function initHost(host) {
-    if (host.dataset.backdropGridInit) return;
-    host.dataset.backdropGridInit = '1';
+    if (host.dataset.backdropGlowInit) return;
+    host.dataset.backdropGlowInit = '1';
 
     var cfg = {
-      gridGap: num(host, 'data-grid-gap', DEFAULTS.gridGap),
-      dotSize: num(host, 'data-dot-size', DEFAULTS.dotSize),
-      radius: num(host, 'data-radius', DEFAULTS.radius),
-      color: host.getAttribute('data-dot-color') || DEFAULTS.color,
-      highlightColor: host.getAttribute('data-dot-highlight') || DEFAULTS.highlightColor
+      size: num(host, 'data-glow-size', DEFAULTS.size),
+      color: host.getAttribute('data-glow-color') || DEFAULTS.color,
+      opacity: num(host, 'data-glow-opacity', DEFAULTS.opacity),
+      blur: num(host, 'data-glow-blur', DEFAULTS.blur)
     };
 
     var reduced = global.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    var canvas = host.querySelector('canvas.backdrop-interactive-grid-canvas');
-    if (!canvas) {
-      canvas = document.createElement('canvas');
-      canvas.className = 'backdrop-interactive-grid-canvas';
-      host.insertBefore(canvas, host.firstChild);
+    var orb = host.querySelector('.backdrop-cursor-glow-orb');
+    if (!orb) {
+      orb = document.createElement('div');
+      orb.className = 'backdrop-cursor-glow-orb';
+      host.appendChild(orb);
     }
 
-    var mouse = { x: -1000, y: -1000 };
-    var dots = [];
-    var raf = 0;
+    orb.style.setProperty('--glow-size', cfg.size + 'px');
+    orb.style.setProperty('--glow-color', cfg.color);
+    orb.style.setProperty('--glow-opacity', String(cfg.opacity));
+    orb.style.setProperty('--glow-blur', cfg.blur + 'px');
 
-    function initDots(w, h) {
-      dots = [];
-      var cols = Math.ceil(w / cfg.gridGap) + 1;
-      var rows = Math.ceil(h / cfg.gridGap) + 1;
-      for (var i = 0; i < cols; i++) {
-        for (var j = 0; j < rows; j++) {
-          dots.push({ x: i * cfg.gridGap, y: j * cfg.gridGap });
-        }
-      }
+    var visible = false;
+    var x = global.innerWidth * 0.5;
+    var y = global.innerHeight * 0.35;
+
+    function place(clientX, clientY) {
+      orb.style.transform = 'translate3d(' + clientX + 'px,' + clientY + 'px,0)';
     }
 
-    function resize() {
-      var rect = host.getBoundingClientRect();
-      canvas.width = Math.max(1, Math.floor(rect.width));
-      canvas.height = Math.max(1, Math.floor(rect.height));
-      initDots(canvas.width, canvas.height);
-      if (reduced) drawOnce();
+    function show() {
+      if (visible) return;
+      visible = true;
+      host.classList.add('is-active');
     }
 
-    function drawOnce() {
-      var ctx = canvas.getContext('2d');
-      if (!ctx) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      var radiusSq = cfg.radius * cfg.radius;
-      for (var i = 0; i < dots.length; i++) {
-        var dot = dots[i];
-        var dx = dot.x - mouse.x;
-        var dy = dot.y - mouse.y;
-        var distSq = dx * dx + dy * dy;
-        ctx.beginPath();
-        if (distSq < radiusSq) {
-          var dist = Math.sqrt(distSq);
-          var factor = 1 - dist / cfg.radius;
-          ctx.arc(dot.x, dot.y, cfg.dotSize + factor * 2, 0, Math.PI * 2);
-          ctx.fillStyle = cfg.highlightColor;
-        } else {
-          ctx.arc(dot.x, dot.y, cfg.dotSize, 0, Math.PI * 2);
-          ctx.fillStyle = cfg.color;
-        }
-        ctx.fill();
-      }
-    }
-
-    function loop() {
-      drawOnce();
-      raf = global.requestAnimationFrame(loop);
+    function hide() {
+      if (!visible) return;
+      visible = false;
+      host.classList.remove('is-active');
     }
 
     function onMove(e) {
-      var rect = canvas.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
-      if (reduced) drawOnce();
+      x = e.clientX;
+      y = e.clientY;
+      place(x, y);
+      show();
     }
 
     function onLeave() {
-      mouse.x = -1000;
-      mouse.y = -1000;
-      if (reduced) drawOnce();
+      hide();
     }
 
-    resize();
+    place(x, y);
     if (reduced) {
-      drawOnce();
+      host.classList.add('is-active', 'is-reduced');
+      place(global.innerWidth * 0.5, global.innerHeight * 0.28);
     } else {
-      raf = global.requestAnimationFrame(loop);
+      global.addEventListener('mousemove', onMove, { passive: true });
+      document.documentElement.addEventListener('mouseleave', onLeave);
     }
 
-    global.addEventListener('resize', resize);
-    canvas.addEventListener('mousemove', onMove);
-    canvas.addEventListener('mouseleave', onLeave);
-
-    host._backdropGridDestroy = function () {
-      global.removeEventListener('resize', resize);
-      canvas.removeEventListener('mousemove', onMove);
-      canvas.removeEventListener('mouseleave', onLeave);
-      if (raf) global.cancelAnimationFrame(raf);
-      delete host.dataset.backdropGridInit;
+    host._backdropGlowDestroy = function () {
+      global.removeEventListener('mousemove', onMove);
+      document.documentElement.removeEventListener('mouseleave', onLeave);
+      delete host.dataset.backdropGlowInit;
     };
   }
 
   function initAll(root) {
-    (root || document).querySelectorAll('[data-backdrop-interactive-grid], .backdrop-interactive-grid').forEach(initHost);
+    (root || document).querySelectorAll('[data-backdrop-cursor-glow], .backdrop-cursor-glow').forEach(initHost);
   }
 
-  global.BackdropInteractiveGrid = { init: initHost, initAll: initAll, defaults: DEFAULTS };
+  global.BackdropCursorGlow = { init: initHost, initAll: initAll, defaults: DEFAULTS };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () { initAll(); });

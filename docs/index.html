@@ -16,39 +16,41 @@
 
     /* glass tokens: $CURSKILLS/diagram/registry/ui.json */
     :root {
-      --bg:    #090909;
-      --s1:    #0f0f0f;
-      --s2:    #161616;
-      --b1:    #1e1e1e;
-      --b2:    #282828;
-      --b3:    #363636;
+      --bg:    #12151c;
+      --surface:  #171b24;
+      --surface2: #1e2430;
+      --s1:    var(--surface);
+      --s2:    var(--surface2);
+      --b1:    #262d3a;
+      --b2:    #313948;
+      --b3:    #3d4656;
       --txt:   #ebebeb;
-      --muted: #555;
-      --dim:   #2e2e2e;
+      --muted: #8b95a8;
+      --dim:   #4a5568;
       --green: #22c55e;
       --red:   #ef4444;
       --blue:  #60a5fa;
       --mono:  'JetBrains Mono', monospace;
-      --glass-bg:               rgba(30, 30, 30, 0.7);
-      --glass-border:           rgba(255, 255, 255, 0.15);
+      --glass-bg:               rgba(10, 10, 10, 0.82);
+      --glass-border:           rgba(255, 255, 255, 0.08);
       --glass-blur:             blur(20px);
-      --glass-shadow:           0 8px 32px rgba(0, 0, 0, 0.4);
-      --glass-glow-color:       rgb(130, 143, 147);
-      --glass-glow-size:        120px;
-      --glass-glow-blur:        40px;
-      --glass-glow-opacity:     0.4;
-      --glass-glow-opacity-hover: 0.5;
-      --glass-pill-bg:          rgba(255, 255, 255, 0.04);
-      --glass-pill-bg-hover:    rgba(255, 255, 255, 0.08);
-      --glass-pill-border:      rgba(255, 255, 255, 0.1);
-      --glass-pill-active-bg:   rgba(255, 255, 255, 0.1);
+      --glass-shadow:           0 8px 32px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.04);
+      --glass-glow-color:       rgb(96, 130, 180);
+      --glass-glow-size:        140px;
+      --glass-glow-blur:        48px;
+      --glass-glow-opacity:     0.45;
+      --glass-glow-opacity-hover: 0.58;
+      --glass-pill-bg:          rgba(255, 255, 255, 0.05);
+      --glass-pill-bg-hover:    rgba(255, 255, 255, 0.09);
+      --glass-pill-border:      rgba(255, 255, 255, 0.12);
+      --glass-pill-active-bg:   rgba(255, 255, 255, 0.11);
       --glass-pill-active-border: rgba(255, 255, 255, 0.28);
       /* backdrops - registry/backdrops/manifest.json */
       --backdrop-grid-size: 56px;
-      --backdrop-grid-line: rgba(255, 255, 255, 0.011);
+      --backdrop-grid-line: rgba(255, 255, 255, 0.028);
       --backdrop-grid-drift-ms: 28s;
-      --backdrop-grid-mask: radial-gradient(ellipse 65% 50% at 50% 8%, black 8%, transparent 88%);
-      --backdrop-glow-color: rgba(255, 255, 255, 0.01);
+      --backdrop-grid-mask: radial-gradient(ellipse 75% 55% at 50% 0%, black 5%, transparent 92%);
+      --backdrop-glow-color: rgba(83, 144, 255, 0.14);
       --backdrop-glow-pulse-ms: 10s;
     }
 
@@ -56,7 +58,12 @@
 
     body {
       font-family: var(--mono);
-      background: var(--bg);
+      background:
+        radial-gradient(ellipse 90% 55% at 50% -8%, rgba(1, 36, 86, 0.42) 0%, transparent 58%),
+        radial-gradient(ellipse 45% 35% at 92% 18%, rgba(83, 144, 255, 0.12) 0%, transparent 52%),
+        radial-gradient(ellipse 40% 30% at 8% 75%, rgba(130, 143, 147, 0.08) 0%, transparent 48%),
+        linear-gradient(165deg, #181d28 0%, #12151c 42%, #151923 100%);
+      background-color: var(--bg);
       color: var(--txt);
       font-size: 13px;
       line-height: 1.7;
@@ -88,17 +95,18 @@
     body.backdrop-root::after {
       content: '';
       position: fixed;
-      top: -20%; left: 50%;
+      top: -25%; left: 50%;
       transform: translateX(-50%);
-      width: 600px; height: 400px;
-      background: radial-gradient(ellipse, var(--backdrop-glow-color) 0%, transparent 70%);
+      width: 900px; height: 520px;
+      background:
+        radial-gradient(ellipse at center, rgba(83, 144, 255, 0.18) 0%, rgba(1, 36, 86, 0.08) 38%, transparent 72%);
       pointer-events: none;
       z-index: 0;
       animation: glowPulse var(--backdrop-glow-pulse-ms) ease-in-out infinite alternate;
     }
     @keyframes glowPulse {
-      from { opacity: 0.35; transform: translateX(-50%) scale(1); }
-      to   { opacity: 0.55; transform: translateX(-50%) scale(1.08); }
+      from { opacity: 0.55; transform: translateX(-50%) scale(1); }
+      to   { opacity: 0.85; transform: translateX(-50%) scale(1.06); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -106,27 +114,51 @@
       body.backdrop-root::after { animation: none; }
     }
 
-    /* landing-hero-backdrop - registry/backdrops/manifest.json#landing-hero-backdrop */
-    .hero-grid {
+    /* landing-hero-backdrop - cursor glow (replaces interactive dots) */
+    .hero-glow {
       position: fixed;
       top: 0; left: 0; right: 0;
       height: 100vh;
       z-index: 1;
-      pointer-events: auto;
+      pointer-events: none;
+      overflow: hidden;
     }
-    .hero-grid canvas.backdrop-interactive-grid-canvas {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      pointer-events: auto;
+    .hero-glow .backdrop-cursor-glow-orb {
+      position: absolute;
+      top: 0; left: 0;
+      width: var(--glow-size, 460px);
+      height: var(--glow-size, 460px);
+      margin-left: calc(var(--glow-size, 460px) / -2);
+      margin-top: calc(var(--glow-size, 460px) / -2);
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(var(--glow-color, 83, 144, 255), var(--glow-opacity, 0.38)) 0%,
+        rgba(var(--glow-color, 83, 144, 255), calc(var(--glow-opacity, 0.38) * 0.45)) 32%,
+        transparent 68%
+      );
+      filter: blur(var(--glow-blur, 52px));
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      will-change: transform, opacity;
+    }
+    .hero-glow.is-active .backdrop-cursor-glow-orb {
+      opacity: 1;
+    }
+    .hero-glow.is-reduced .backdrop-cursor-glow-orb {
+      opacity: 0.55;
+      transition: none;
     }
 
     /* NAV */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       height: 46px;
-      background: rgba(9,9,9,0.82);
-      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-      border-bottom: 1px solid var(--b1);
+      background: rgba(4, 4, 8, 0.55);
+      backdrop-filter: blur(28px) saturate(1.2);
+      -webkit-backdrop-filter: blur(28px) saturate(1.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+      box-shadow: 0 4px 28px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 44px;
     }
@@ -136,13 +168,17 @@
     }
     .nav-gh {
       display: flex; align-items: center; gap: 6px;
-      font-size: 11px; color: var(--muted);
-      border: 1px solid var(--b3); padding: 5px 14px; border-radius: 999px; color: #b0b0b0;
-      transition: color .15s, border-color .15s;
+      font-size: 11px;
+      background: rgba(8, 8, 12, 0.65);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      padding: 5px 14px; border-radius: 999px; color: #c8d0dc;
+      transition: color .15s, border-color .15s, background .15s;
     }
-    .nav-gh:hover { color: #fff; border-color: rgba(255,255,255,0.35); }
+    .nav-gh:hover { color: #fff; border-color: rgba(255,255,255,0.28); background: rgba(12,12,18,0.75); }
 
-    /* LAYOUT - pointer-events none so hero-grid receives hover in empty space */
+    /* LAYOUT */
     .wrap {
       position: relative; z-index: 2;
       max-width: 860px; margin: 0 auto; padding: 0 44px;
@@ -235,34 +271,41 @@
     }
     .btn-p {
       display: flex; align-items: center; gap: 9px;
-      background: rgba(255,255,255,0.065);
+      background: rgba(8, 8, 12, 0.78);
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.14);
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 20px rgba(0,0,0,0.35);
       color: var(--txt); font-family: var(--mono); font-size: 12px; font-weight: 600;
       padding: 10px 22px; border-radius: 999px; letter-spacing: .01em;
       transition: background .15s, border-color .15s, transform .12s;
     }
     .btn-p:hover {
-      background: rgba(255,255,255,0.1);
-      border-color: rgba(255,255,255,0.2);
+      background: rgba(12, 12, 18, 0.88);
+      border-color: rgba(255,255,255,0.22);
       transform: translateY(-1px);
     }
     .btn-g {
       display: flex; align-items: center; gap: 8px;
-      background: rgba(255,255,255,0.025);
+      background: rgba(8, 8, 12, 0.72);
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.07);
-      font-family: var(--mono); font-size: 12px; color: var(--muted);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 20px rgba(0,0,0,0.35);
+      font-family: var(--mono); font-size: 11.5px;
       padding: 10px 22px; border-radius: 999px;
-      transition: background .15s, border-color .15s, color .15s;
+      transition: background .15s, border-color .15s;
     }
     .btn-g:hover {
-      background: rgba(255,255,255,0.055);
-      border-color: rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.7);
+      background: rgba(12, 12, 18, 0.82);
+      border-color: rgba(255,255,255,0.2);
     }
-    .btn-g code { font-size: 11.5px; font-family: var(--mono); color: rgba(255,255,255,0.42); }
+    .btn-g .t-prompt { color: #64748b; font-weight: 600; }
+    .btn-g .t-cmd { color: #e2e8f0; font-weight: 600; }
+    .btn-g .t-flag { color: #f59e0b; font-weight: 500; }
+    .btn-g .t-url { color: #93c5fd; font-weight: 500; }
+    .btn-g .t-pipe { color: #64748b; }
+    .btn-g .t-jq { color: #c084fc; font-weight: 500; }
+    .btn-g .t-str { color: #86efac; }
+    .btn-g svg { color: rgba(255,255,255,0.55); flex-shrink: 0; }
 
     /* === F2: DEMO with climan === */
     .demo {
@@ -305,7 +348,11 @@
     }
     .sec-head::after { content:''; flex:1; height:1px; background:var(--b1); }
 
-    /* ARCH - glass-glow + glass-panel (diagram/registry/ui.json) */
+    /* ARCH - infographic glass + diagram unit ($SKILLS/visual-tokens/registry/tokens.json) */
+    .diagram-container {
+      position: relative;
+      width: 100%;
+    }
     .glass-glow {
       position: relative;
       padding: 24px 0;
@@ -339,12 +386,45 @@
       padding: 20px 16px;
       overflow-x: auto;
     }
-    .arch-diagram {
-      width: 100%; max-width: 580px;
-      display: block; margin: 0 auto;
-      border: none; background: transparent;
+    .diagram-container .glass-panel {
+      background: rgba(4, 4, 8, 0.55);
+      backdrop-filter: blur(28px) saturate(1.2);
+      -webkit-backdrop-filter: blur(28px) saturate(1.2);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.06);
     }
-    .glass-panel object.arch-diagram { pointer-events: none; }
+    .arch-diagram {
+      width: 100%;
+      max-width: 780px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border: none;
+      background: transparent;
+    }
+    /* diagram-legend - $SKILLS/infographic/registry/components/diagram-legend.html */
+    .dl-row {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 16px 0 0;
+      padding: 0 8px;
+    }
+    .dl-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+    }
+    .dl-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
 
     .install-block { border:1px solid var(--b1); border-radius:8px; overflow:hidden; }
     .i-step { padding:20px 22px; border-bottom:1px solid var(--b1); }
@@ -474,6 +554,16 @@
       white-space: nowrap;
       max-width: 100%;
       overflow-x: auto;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+    }
+    .cp-expand:hover {
+      border-color: rgba(255,255,255,0.22);
+      background: var(--s2);
+    }
+    .cp-expand.copied {
+      border-color: rgba(74,222,128,0.45);
+      background: rgba(22,163,74,0.12);
     }
     .cp-copy-hint {
       font-size: 9.5px; color: #777;
@@ -497,8 +587,8 @@
 
 <nav>
   <div class="nav-brand">
-    <svg width="20" height="20" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><rect x="4" y="4" width="88" height="88" rx="14" fill="#012456"/><path d="M22 28h52v8H22V28zm0 16h36v8H22V44zm0 16h44v8H22V60z" fill="#fff" opacity="0.9"/></svg>
-    <span style="font-size:14px;font-weight:300;color:rgba(255,255,255,0.2);line-height:1">/</span>
+    <img src="https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/powershell.webp" width="20" height="20" style="border-radius:5px;flex-shrink:0" alt="Powershell" />
+    <span style="font-size:14px;font-weight:300;color:rgba(255,255,255,0.48);line-height:1">/</span>
     <img src="https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/claude.webp" width="20" height="20" style="border-radius:5px;flex-shrink:0" alt="Claude" />
     climan
   </div>
@@ -508,13 +598,12 @@
   </a>
 </nav>
 
-<div class="hero-grid backdrop-interactive-grid"
-     data-backdrop-interactive-grid
-     data-grid-gap="40"
-     data-dot-size="1"
-     data-radius="160"
-     data-dot-color="rgba(100,100,100,0.1)"
-     data-dot-highlight="rgba(180,180,180,0.35)"
+<div class="hero-glow backdrop-cursor-glow"
+     data-backdrop-cursor-glow
+     data-glow-size="480"
+     data-glow-color="83, 144, 255"
+     data-glow-opacity="0.34"
+     data-glow-blur="56"
      aria-hidden="true"></div>
 
 <div class="wrap">
@@ -522,12 +611,9 @@
 
     <!-- F1: pwsh + / + Claude icon row -->
     <div class="apple-mark" style="display:flex;align-items:center;gap:14px">
-      <svg width="76" height="76" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="PowerShell">
-        <rect x="8" y="8" width="80" height="80" rx="16" fill="#012456"/>
-        <path d="M28 32h40v6H28V32zm0 14h28v6H28V46zm0 14h34v6H28V60z" fill="#fff" opacity="0.9"/>
-        <path d="M58 58l12 8-12 8V58z" fill="#5390FF"/>
-      </svg>
-      <span style="font-size:32px;font-weight:300;color:rgba(255,255,255,0.18);letter-spacing:0;line-height:1">/</span>
+      <img src="https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/powershell.webp"
+           width="68" height="68" style="border-radius:16px;flex-shrink:0;filter:drop-shadow(0 0 24px rgba(255,255,255,0.1))" alt="Powershell" />
+      <span style="font-size:32px;font-weight:300;color:rgba(255,255,255,0.52);letter-spacing:0;line-height:1">/</span>
       <img src="https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/claude.webp"
            width="68" height="68" style="border-radius:16px;flex-shrink:0;filter:drop-shadow(0 0 24px rgba(255,255,255,0.1))" alt="Claude" />
     </div>
@@ -537,7 +623,7 @@
     <h1>Give your agents<br><em style="text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px">CLI docs</em>,<br>not guesses.</h1>
 
     <p class="hero-sub">
-      The <code>climan</code> skill fetches real cmdlet JSON
+      <code>/climan</code> fetches real cmdlet JSON
       from <code>climan.dev/pwsh</code> before your agent answers.
       Not from training data.
     </p>
@@ -558,11 +644,16 @@
       <a href="#commands" class="btn-p">
         <img src="https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/claude.webp"
              width="16" height="16" style="border-radius:3px;flex-shrink:0" alt="" />
-        climan skill
+        /climan
       </a>
       <a href="#arch" class="btn-g">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-        <code>curl climan.dev/pwsh/gci</code>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+        <span class="t-cmd">curl</span>
+        <span class="t-flag">-s</span>
+        <span class="t-url">climan.dev/pwsh/gci</span>
+        <span class="t-pipe">|</span>
+        <span class="t-jq">jq</span>
+        <span class="t-str">&#39;.&#39;</span>
       </a>
     </div>
 
@@ -601,9 +692,22 @@
 <!-- F5: no 01/02 number noise -->
 <div class="section reveal" id="arch">
   <div class="sec-head">How it works</div>
-  <div class="glass-glow">
+  <div class="diagram-container glass-glow">
     <div class="glass-panel">
-      <object class="arch-diagram" type="image/svg+xml" data="architecture-glass.svg" aria-label="climan.dev architecture"></object>
+      <object
+        class="arch-diagram"
+        type="image/svg+xml"
+        data="architecture-glass.svg"
+        aria-label="climan.dev architecture: agent curl to Postgres via Hyperdrive, hybrid search, build pipeline"
+        width="780"
+        height="620"
+      ></object>
+    </div>
+    <div class="dl-row" aria-label="Architecture legend">
+      <div class="dl-item"><div class="dl-swatch" style="background:#4ade80"></div>happy path</div>
+      <div class="dl-item"><div class="dl-swatch" style="background:#f87171"></div>egress block</div>
+      <div class="dl-item"><div class="dl-swatch" style="background:#93c5fd"></div>hybrid search</div>
+      <div class="dl-item"><div class="dl-swatch" style="background:#fbbf24"></div>build plane</div>
     </div>
   </div>
 </div>
@@ -684,7 +788,7 @@
     </div>
 
   </div>
-  <div class="cmd-footer-note">click any cmdlet to see the API call &nbsp;·&nbsp; 302 total at <code class="t-url">climan.dev/pwsh/&lt;cmdlet&gt;</code> &nbsp;·&nbsp; search: <code class="t-url">climan.dev/search?q=...&amp;ns=pwsh</code></div>
+  <div class="cmd-footer-note">click any cmdlet to copy the API call &nbsp;·&nbsp; 302 total at <code class="t-url">climan.dev/pwsh/&lt;cmdlet&gt;</code> &nbsp;·&nbsp; search: <code class="t-url">climan.dev/search?q=...&amp;ns=pwsh</code></div>
 </div>
 
 
@@ -724,14 +828,49 @@
   }
   setTimeout(runCounter, 700);
 
-  // INTERACTIVE PILLS - expansion zone lives BELOW the pill row, never in-flow
+  // INTERACTIVE PILLS - click copies curl; expansion shows the command
+  const COPY_ICON = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+  const OK_ICON = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+  function curlFor(cmd) {
+    return `curl -s climan.dev/pwsh/${cmd} | jq '.'`;
+  }
+
+  function copyCurl(text, onOk) {
+    const done = () => onOk?.();
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(done);
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (_) {}
+      ta.remove();
+      done();
+    }
+  }
+
+  function flashCopied(hint, expand) {
+    hint.classList.add('copied');
+    hint.innerHTML = `${OK_ICON} copied!`;
+    expand?.classList.add('copied');
+    setTimeout(() => {
+      hint.classList.remove('copied');
+      hint.innerHTML = `${COPY_ICON} click to copy again`;
+      expand?.classList.remove('copied');
+    }, 1800);
+  }
+
   document.querySelectorAll('.cp-card').forEach(card => {
     card.addEventListener('click', () => {
       const cmd = card.querySelector('.t-cmd').textContent.trim();
       const isActive = card.classList.contains('active');
       const zone = card.closest('.cg-cat').querySelector('.expansion-zone');
+      const curl = curlFor(cmd);
 
-      // collapse everything
       document.querySelectorAll('.cp-card.active').forEach(c => c.classList.remove('active'));
       document.querySelectorAll('.expansion-zone.open').forEach(z => {
         z.classList.remove('open');
@@ -740,10 +879,10 @@
 
       if (!isActive) {
         card.classList.add('active');
-        const curl = `curl -s climan.dev/pwsh/${cmd} | jq '.'`;
 
         const expand = document.createElement('div');
         expand.className = 'cp-expand';
+        expand.title = 'Click to copy';
         expand.innerHTML =
           `<span class="t-prompt">$</span> ` +
           `<span class="t-cmd">curl</span> ` +
@@ -755,26 +894,24 @@
 
         const hint = document.createElement('div');
         hint.className = 'cp-copy-hint';
-        hint.innerHTML =
-          `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> click to copy`;
+        hint.innerHTML = `${COPY_ICON} click to copy`;
 
+        const doCopy = () => copyCurl(curl, () => flashCopied(hint, expand));
+
+        expand.addEventListener('click', ev => {
+          ev.stopPropagation();
+          doCopy();
+        });
         hint.addEventListener('click', ev => {
           ev.stopPropagation();
-          navigator.clipboard?.writeText(curl).then(() => {
-            hint.classList.add('copied');
-            hint.innerHTML = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> copied!`;
-            setTimeout(() => {
-              hint.classList.remove('copied');
-              hint.innerHTML = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> click to copy`;
-            }, 1800);
-          });
+          doCopy();
         });
 
         zone.appendChild(expand);
         zone.appendChild(hint);
-        // force reflow then open
         zone.offsetHeight;
         zone.classList.add('open');
+        doCopy();
       }
     });
   });
