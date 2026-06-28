@@ -1,27 +1,42 @@
 # Skills and Namespace Roadmap
 
-## Output today: `/manpages` skill
+## Climan skill (umbrella)
 
-Claude.ai skill (not a "climan" umbrella skill). One skill per namespace so agents load only what they need.
+One skill bundle, namespace branches inside it. Agents load the branch they need - not a mega-skill for every corpus.
 
 | piece | role |
 |-------|------|
-| **`/manpages` skill** | fetch live macOS man pages from `climan.dev/mac/{cmd}` |
-| **`fetch.sh` cascade** | curl -> wget -> python -> node; exit 2 = egress proxy block |
+| **climan skill** | fetch live CLI docs from `climan.dev/{ns}/{key}` |
+| **`fetch.sh` cascade** | curl → wget → python → node; exit 2 = egress proxy block |
 | **primary URL** | `https://climan.dev` |
 | **fallback URL** | `https://manpages.manpages.workers.dev` (blocked on some agent hosts) |
 
 Agent flow:
 
 ```text
-user asks about macOS CLI
-  -> /manpages skill
-  -> fetch.sh networksetup
-  -> parse JSON (synopsis, description)
+user asks about PowerShell task
+  -> climan skill (/pwsh branch)
+  -> fetch.sh OR curl search?q=...
+  -> GET /pwsh/{cmdlet} for full record
   -> answer from real flags, not training data
 ```
 
-Packaged as `manpages.skill` for Claude.ai project upload.
+## `/pwsh` branch (live)
+
+| route | example |
+|-------|---------|
+| exact lookup | `GET /pwsh/Get-ChildItem` |
+| alias | `GET /pwsh/gci` |
+| search | `GET /search?q=kill+process&ns=pwsh` |
+| manifest | `GET /pwsh` - all 302 cmdlets |
+
+Search-first pattern for natural language:
+
+```bash
+curl "climan.dev/search?q=kill+a+process+by+name&ns=pwsh" | jq '.results[0].key'
+# Stop-Process
+curl "climan.dev/pwsh/Stop-Process" | jq '.parameters'
+```
 
 ## Egress proxy workaround
 
@@ -31,43 +46,31 @@ If `fetch.sh` exits 2: ask user to curl locally and paste JSON. Do not hallucina
 
 -> [`egress-proxy.md`](egress-proxy.md)
 
-## Future namespaces
+## Future namespace branches
 
-Each namespace gets its own skill when the corpus ships. No mega-skill routing everything.
+Each namespace gets a branch in the climan skill when the corpus ships.
 
-| namespace | source | skill (planned) | status |
-|-----------|--------|-----------------|--------|
-| `/mac` | macOS man pages | `/manpages` | live |
-| `/ansi` | ANSI / ECMA-48 | TBD | live |
-| `/pwsh` | PowerShell 7.4 docs (MicrosoftDocs) | `/pwsh` | live |
-| `/brew` | Homebrew formulae | TBD | planned |
-| `/linux` | Linux man pages | TBD | planned |
-| `/npm` | npm CLI help | TBD | planned |
+| branch | source | skill route | status |
+|--------|--------|-------------|--------|
+| `/pwsh` | PowerShell 7.4 docs (MicrosoftDocs + Get-Help) | `/pwsh` | **live** - 302 cmdlets, hybrid search |
 
-**`/pwsh` not `/ps`** - `ps` is POSIX process status. Route, binding, and repo slug are all `pwsh`.
+**`/pwsh` not `/ps` in docs/skill naming** - `ps` is POSIX process status. API alias route `/ps/{cmdlet}` exists for convenience.
 
-Worker pattern per namespace:
+Worker pattern per branch:
 
 ```text
-climan.dev/{ns}/{cmd} -> KV binding + {ns}: key prefix
+climan.dev/{ns}/{key} -> Hyperdrive -> Postgres docs WHERE ns='{ns}'
+/search?ns={ns}       -> searchHybrid() - generic, works once seeded
 ```
-
-KV bindings (separate namespace per corpus):
-
-| binding | route | key prefix |
-|---------|-------|------------|
-| MAC | `/mac/*` | `cmd:` (legacy) |
-| ANSI | `/ansi/*` | `ansi:` |
-| PWSH | `/pwsh/*` | `pwsh:` |
 
 ## Operator refresh cadence
 
-After macOS updates (new binaries ship new man pages):
+After vendor doc updates or new cmdlets:
 
 ```bash
-./scripts/extract.sh && ./scripts/upload.sh && wrangler deploy && ./test.sh
+./scripts/deploy.sh              # enrich + seed + deploy
+./scripts/deploy.sh --skip-enrich  # re-seed only
+./test.sh https://climan.dev
 ```
 
-No LaunchAgent. Manual run after `softwareupdate` or major OS bump.
-
-Local BM25 index rebuild (optional, for natural-language discovery on your machine) is documented in [`search-and-bm25.md`](search-and-bm25.md). Not required for the public API.
+Requires `.env` with `CF_ACCOUNT`, `CF_TOKEN`, `PGPASSWORD`.

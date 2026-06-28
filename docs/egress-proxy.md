@@ -2,12 +2,12 @@
 
 ## Why this exists
 
-Agent sandboxes need live CLI docs without hallucination. A Cloudflare Worker + KV gives sub-ms CPU lookups. But agents fetch over HTTP from inside containers with an Anthropic egress proxy in the path.
+Agent sandboxes need live CLI docs without hallucination. A Cloudflare Worker + Postgres via Hyperdrive serves authoritative JSON. But agents fetch over HTTP from inside containers with an Anthropic egress proxy in the path.
 
 ## What fails
 
 ```
-agent -> curl https://manpages.manpages.workers.dev/man/ls
+agent -> curl https://manpages.manpages.workers.dev/pwsh/Get-ChildItem
       -> TLS ok (O=Anthropic egress CA)
       -> HTTP 403 host_not_allowed
 ```
@@ -17,11 +17,11 @@ Same project, same curl, different container host -> sometimes works, sometimes 
 ## What works
 
 ```
-agent -> curl https://climan.dev/mac/ls
+agent -> curl https://climan.dev/pwsh/Get-ChildItem
       -> 200 JSON
 ```
 
-Custom domain on same worker, same KV. Blocklist targets `*.workers.dev` (phishing abuse vector), not arbitrary owned domains.
+Custom domain on same worker, same Postgres backend. Blocklist targets `*.workers.dev` (phishing abuse vector), not arbitrary owned domains.
 
 ## Practical rules for integrators
 

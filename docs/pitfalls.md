@@ -10,42 +10,48 @@ Forward-looking gotchas. Not a build diary.
 
 **actually:** fleet-level blocklist on some agent hosts; `Allowed Domains: *` in system prompt does not override it
 
-**fix:** deploy worker on a custom domain you own (`climan.dev`). Custom domains are not on the blanket blocklist
+**fix:** use custom domain `climan.dev`. Custom domains are not on the blanket blocklist
 
 **detect:** grep response body for `Host not in allowlist`; exit code 2 in fetch cascade = proxy block, not endpoint failure
 
 -> [egress-proxy.md](egress-proxy.md)
 
-## `wrangler kv bulk put` without `--remote`
+## Postgres SSL from local wrangler dev
 
-**symptom:** 500 Internal Server Error on bulk upload
+**symptom:** `no pg_hba.conf entry for host "x.x.x.x", no encryption`
 
-**fix:** always pass `--remote`. Default targets local dev KV
+**cause:** local `wrangler dev` connects to Azure Postgres without SSL; Azure requires it
 
-## Parallel `wrangler kv bulk put`
+**fix:** test against deployed worker (`https://climan.dev`) or add firewall rule for your IP in Azure portal with `sslmode=require`
 
-**symptom:** race conditions; 3 of 4 chunks fail with 500
+## Password with `!` in `.env`
 
-**fix:** sequential uploads only; no backgrounding with `&`
+**symptom:** seed script or shell fails to connect; password truncated at `!`
 
-## ~15% extraction failures
+**cause:** unquoted or double-quoted `!` triggers history expansion in zsh/bash
 
-**symptom:** `man-pages-extract.sh` reports 2,681 failed of 18,019 files
+**fix:** single-quote the password in `.env`: `PGPASSWORD='YourPass!123'`
 
-**cause:** compressed pages, symlinks, mandoc-incompatible formats
+## Embedding model mismatch
 
-**severity:** expected. 15,299 usable entries is the full macOS CLI corpus
+**symptom:** search returns wrong cmdlets or uniformly low scores after re-seed
 
-## `/mac/` 404 but `/man/` works
+**cause:** build-time embed used different model/pooling than query-time Workers AI
 
-**symptom:** namespace route missing after domain setup
+**fix:** both must be `@cf/baai/bge-base-en-v1.5` with `pooling=cls`. Re-seed entire corpus if changed.
 
-**cause:** worker code not deployed; custom domain wired but old handler still live
+## Hyperdrive connection limit
 
-**fix:** deploy worker with `/mac/` routes (GUI Edit code or `wrangler deploy`)
+**symptom:** intermittent `db error` under load
 
-## KV key prefix before multi-namespace
+**cause:** worker opens postgres client per request with `max: 1`; connection churn under burst
 
-**symptom:** future `/linux` namespace collides with mac keys
+**fix:** expected at low traffic. For scale, tune Hyperdrive pool settings or add connection reuse pattern.
 
-**fix:** decide now: separate KV namespaces per corpus vs `{namespace}:` key prefix before shipping namespace #2
+## Stale vectors after record edit
+
+**symptom:** exact lookup correct, search ranks wrong cmdlet
+
+**cause:** edited `content` or enrich data but did not re-run `seed_pwsh.py`
+
+**fix:** `./scripts/deploy.sh` or `--skip-enrich` if only re-seed needed

@@ -1,31 +1,55 @@
 #!/bin/zsh
-# One-shot: extract all man pages -> upload to KV -> deploy worker
-# Usage: ./scripts/deploy.sh
-set -eo pipefail
+# deploy.sh - full climan pipeline
+# usage: ./scripts/deploy.sh [--skip-seed] [--skip-enrich]
+#
+# requires .env at repo root with CF_ACCOUNT, CF_TOKEN, PGPASSWORD set
+# or export those vars manually before running
 
+set -eo pipefail
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
-echo "============================================"
-echo "  climan.dev worker - full deploy pipeline"
-echo "============================================"
+# load .env if present
+[[ -f "$REPO_ROOT/.env" ]] && export $(grep -v '^#' "$REPO_ROOT/.env" | xargs)
+
+SKIP_ENRICH=false
+SKIP_SEED=false
+for arg in "$@"; do
+  [[ "$arg" == "--skip-enrich" ]] && SKIP_ENRICH=true
+  [[ "$arg" == "--skip-seed" ]]   && SKIP_SEED=true
+done
+
+echo "🌕 climan deploy pipeline"
 echo ""
 
-echo "=== STEP 1/3: EXTRACT ==="
-"$REPO_ROOT/scripts/extract.sh"
-echo ""
+# ── step 1: enrich pwsh records from vendor markdown ─────────────────────────
+if [[ "$SKIP_ENRICH" == "false" ]]; then
+  echo "=== 1/3: enrich pwsh records ==="
+  python3 "$REPO_ROOT/scripts/enrich_pwsh_records.py"
+  echo ""
+else
+  echo "=== 1/3: enrich -- skipped ==="
+fi
 
-echo "=== STEP 2/3: UPLOAD TO KV ==="
-"$REPO_ROOT/scripts/upload.sh"
-echo ""
+# ── step 2: seed Postgres ─────────────────────────────────────────────────────
+if [[ "$SKIP_SEED" == "false" ]]; then
+  echo "=== 2/3: seed Postgres ==="
+  : "${CF_ACCOUNT:?CF_ACCOUNT not set}"
+  : "${CF_TOKEN:?CF_TOKEN not set}"
+  : "${PGPASSWORD:?PGPASSWORD not set}"
+  python3 "$REPO_ROOT/scripts/seed_pwsh.py"
+  echo ""
+else
+  echo "=== 2/3: seed -- skipped ==="
+fi
 
-echo "=== STEP 3/3: DEPLOY WORKER ==="
+# ── step 3: deploy worker ─────────────────────────────────────────────────────
+echo "=== 3/3: deploy worker ==="
 cd "$REPO_ROOT"
-wrangler deploy 2>&1
+npx wrangler deploy
 echo ""
 
-echo "🟢 full pipeline complete"
+echo "🟢 deploy complete"
 echo ""
-echo "test:"
-echo "  curl https://climan.dev/mac/networksetup"
-echo "  curl https://climan.dev/search?q=wifi"
-echo "  $REPO_ROOT/test.sh"
+echo "smoke test:"
+echo "  curl -s https://climan.dev/pwsh/Get-ChildItem | jq .cmdlet"
+echo "  curl -s 'https://climan.dev/search?q=find+files+recursively&ns=pwsh' | jq '.results[0].key'"

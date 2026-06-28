@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>/manpages - macOS man pages for AI agents</title>
-  <meta name="description" content="Real macOS man page JSON. 15,299 commands. Your agent stops guessing." />
-  <meta property="og:title" content="/manpages" />
-  <meta property="og:description" content="Real macOS man page JSON. 15,299 commands. Zero hallucinated flags." />
+  <title>climan - PowerShell docs for AI agents</title>
+  <meta name="description" content="Real PowerShell 7.4 cmdlet JSON. 302 cmdlets. Hybrid search. Your agent stops guessing." />
+  <meta property="og:title" content="climan.dev" />
+  <meta property="og:description" content="Real PowerShell cmdlet JSON. 302 cmdlets. Zero hallucinated flags." />
   <meta property="og:url" content="https://vdutts7.github.io/climan/" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -264,7 +264,7 @@
     }
     .btn-g code { font-size: 11.5px; font-family: var(--mono); color: rgba(255,255,255,0.42); }
 
-    /* === F2: DEMO with proper code-fenced /manpages === */
+    /* === F2: DEMO with climan === */
     .demo {
       display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
       opacity: 0; animation: fadeUp .7s ease .86s forwards;
@@ -411,7 +411,7 @@
     .t-cmt  { color: #606060; font-size:11px; }  /* # comments */
     .t-prompt { color: #4ade80; user-select:none; }           /* $ prompt */
     .t-op   { color: rgba(255,255,255,0.22); }    /* operators > */
-    .t-slash-cmd { color: #c084fc; font-weight:600; }         /* /manpages slash commands */
+    .t-slash-cmd { color: #c084fc; font-weight:600; }         /* climan slash commands */
 
     /* COMMAND GRID */
     .cmd-intro {
@@ -497,10 +497,10 @@
 
 <nav>
   <div class="nav-brand">
-    <svg width="20" height="20" viewBox="0 0 814 1000" fill="#fff" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 790.7 0 663 0 541.8c0-207.1 135.4-316.6 269.7-316.6 66.9 0 122.7 44.1 164.7 44.1 40.5 0 103.4-46.8 178.3-46.8 27.6 0 160.4 2.6 243.5 124.6zm-187.2-166.6c37.9-47.1 65-109.3 65-171.6 0-8.9-.6-17.9-2.1-25.5-61.5 2.3-133.8 41.2-176.5 93.3-33.4 37.9-65 100.1-65 163.4 0 9.6 1.6 19.1 2.7 22.2 3.8.5 10 1.1 16.1 1.1 55.1 0 123.5-37.3 159.8-82.9z"/></svg>
+    <svg width="20" height="20" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><rect x="4" y="4" width="88" height="88" rx="14" fill="#012456"/><path d="M22 28h52v8H22V28zm0 16h36v8H22V44zm0 16h44v8H22V60z" fill="#fff" opacity="0.9"/></svg>
     <span style="font-size:14px;font-weight:300;color:rgba(255,255,255,0.2);line-height:1">/</span>
     <img src="https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/claude.webp" width="20" height="20" style="border-radius:5px;flex-shrink:0" alt="Claude" />
-    /manpages
+    climan
   </div>
   <a href="https://github.com/vdutts7/climan" target="_blank" rel="noopener" class="nav-gh">
     <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
@@ -520,28 +520,32 @@
 <div class="wrap">
   <div class="hero">
 
-    <!-- F1: Apple + / + Claude icon row -->
+    <!-- F1: pwsh + / + Claude icon row -->
     <div class="apple-mark" style="display:flex;align-items:center;gap:14px">
-      <svg width="76" height="76" viewBox="0 0 814 1000" fill="#fff" xmlns="http://www.w3.org/2000/svg" aria-label="Apple"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 790.7 0 663 0 541.8c0-207.1 135.4-316.6 269.7-316.6 66.9 0 122.7 44.1 164.7 44.1 40.5 0 103.4-46.8 178.3-46.8 27.6 0 160.4 2.6 243.5 124.6zm-187.2-166.6c37.9-47.1 65-109.3 65-171.6 0-8.9-.6-17.9-2.1-25.5-61.5 2.3-133.8 41.2-176.5 93.3-33.4 37.9-65 100.1-65 163.4 0 9.6 1.6 19.1 2.7 22.2 3.8.5 10 1.1 16.1 1.1 55.1 0 123.5-37.3 159.8-82.9z"/></svg>
+      <svg width="76" height="76" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="PowerShell">
+        <rect x="8" y="8" width="80" height="80" rx="16" fill="#012456"/>
+        <path d="M28 32h40v6H28V32zm0 14h28v6H28V46zm0 14h34v6H28V60z" fill="#fff" opacity="0.9"/>
+        <path d="M58 58l12 8-12 8V58z" fill="#5390FF"/>
+      </svg>
       <span style="font-size:32px;font-weight:300;color:rgba(255,255,255,0.18);letter-spacing:0;line-height:1">/</span>
       <img src="https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/claude.webp"
            width="68" height="68" style="border-radius:16px;flex-shrink:0;filter:drop-shadow(0 0 24px rgba(255,255,255,0.1))" alt="Claude" />
     </div>
 
-    <div class="eyebrow">macOS man pages for AI agents</div>
+    <div class="eyebrow">PowerShell docs for AI agents</div>
 
-    <h1>Give your agents<br><em style="text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px">man pages</em>,<br>not guesses.</h1>
+    <h1>Give your agents<br><em style="text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px">CLI docs</em>,<br>not guesses.</h1>
 
     <p class="hero-sub">
-      The <code>/manpages</code> skill fetches real man page JSON
-      from <code>/usr/share/man</code> before your agent answers.
+      The <code>climan</code> skill fetches real cmdlet JSON
+      from <code>climan.dev/pwsh</code> before your agent answers.
       Not from training data.
     </p>
 
     <div class="stat-row">
       <div class="stat-card">
-        <div class="stat-card-n" id="counter">15,299</div>
-        <div class="stat-card-l">macOS commands</div>
+        <div class="stat-card-n" id="counter">302</div>
+        <div class="stat-card-l">PowerShell cmdlets</div>
       </div>
       <div class="stat-card">
         <div class="stat-card-n">0</div>
@@ -551,43 +555,42 @@
 
     <!-- F4 + F6: glass, no "skill" word -->
     <div class="btns">
-      <a href="#install" class="btn-p">
+      <a href="#commands" class="btn-p">
         <img src="https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/claude.webp"
              width="16" height="16" style="border-radius:3px;flex-shrink:0" alt="" />
-        install /manpages
+        climan skill
       </a>
       <a href="#arch" class="btn-g">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-        <code>curl climan.dev/mac/ls</code>
+        <code>curl climan.dev/pwsh/gci</code>
       </a>
     </div>
 
-    <!-- F2: /manpages in proper code tag in both demo headers -->
+    <!-- F2: climan in proper code tag in both demo headers -->
     <div class="demo">
       <div class="demo-block bad">
         <div class="dh">
           <span class="dot" style="background:var(--red)"></span>
-          WITHOUT <code class="stag">/manpages</code> - AGENT GUESSES
+          WITHOUT <code class="stag">climan</code> - AGENT GUESSES
         </div>
         <div class="db">
-          <div><span class="t-prompt">$</span> <span class="t-cmd">networksetup</span> <span class="t-badflag">--wifi-status</span></div>
-          <div class="t-err">networksetup: Error: unrecognized option &#39;--wifi-status&#39;</div>
-          <div class="t-err">** Error: The command is not recognized.</div>
+          <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">Get-ChildItem</span> <span class="t-badflag">-RecursiveDepth</span> <span class="t-arg">.</span></div>
+          <div class="t-err">Get-ChildItem: A parameter cannot be found that matches parameter name &#39;RecursiveDepth&#39;.</div>
           <br>
-          <div class="t-cmt"># --wifi-status doesn&#39;t exist. agent invented it.</div>
+          <div class="t-cmt"># -RecursiveDepth doesn&#39;t exist. agent invented it. real flag is -Recurse.</div>
         </div>
       </div>
       <div class="demo-block good">
         <div class="dh">
           <span class="dot" style="background:var(--green)"></span>
-          WITH <code class="stag">/manpages</code> - REAL MAN PAGE
+          WITH <code class="stag">climan</code> - REAL CMDLET DOCS
         </div>
         <div class="db">
-          <div><span class="t-prompt">$</span> <span class="t-cmd">curl</span> <span class="t-flag">-s</span> <span class="t-url">climan.dev/mac/networksetup</span> <span class="t-pipe">|</span> <span class="t-jq">jq</span> <span class="t-str">&#39;.synopsis&#39;</span></div>
-          <div class="t-out"><span class="t-str">&quot;networksetup [-getairportnetwork hardwareport] ...&quot;</span></div>
+          <div><span class="t-prompt">$</span> <span class="t-cmd">curl</span> <span class="t-flag">-s</span> <span class="t-url">&quot;climan.dev/search?q=find+files+recursively&amp;ns=pwsh&quot;</span> <span class="t-pipe">|</span> <span class="t-jq">jq</span> <span class="t-str">&#39;.results[0].key&#39;</span></div>
+          <div class="t-out"><span class="t-str">&quot;Get-ChildItem&quot;</span></div>
           <br>
-          <div><span class="t-prompt">$</span> <span class="t-cmd">networksetup</span> <span class="t-flag">-getairportnetwork</span> <span class="t-arg">en0</span></div>
-          <div class="t-ok">Current Wi-Fi Network: YourNetwork</div>
+          <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">Get-ChildItem</span> <span class="t-flag">-Recurse</span> <span class="t-arg">.</span></div>
+          <div class="t-ok">Directory: C:\Users\you\Documents</div>
         </div>
       </div>
     </div>
@@ -606,156 +609,88 @@
 </div>
 
 <div class="section reveal" id="commands" style="padding-bottom:0">
-  <div class="sec-head">macOS command library</div>
-  <p class="cmd-intro">Every card is a live API call. <code class="t-cmd">curl climan.dev/mac/&lt;cmd&gt;</code></p>
+  <div class="sec-head">PowerShell cmdlet library</div>
+  <p class="cmd-intro">Every card is a live API call. <code class="t-cmd">curl climan.dev/pwsh/&lt;cmdlet&gt;</code></p>
   <div class="cmd-grid" id="cmdgrid">
 
     <div class="cg-cat">
-      <div class="cg-label">Networking</div>
+      <div class="cg-label">File System</div>
       <div class="cg-pills">
-        <div class="cp-card"><span class="t-cmd">networksetup</span><span class="cp-desc">wifi &amp; ethernet config</span></div>
-        <div class="cp-card"><span class="t-cmd">ifconfig</span><span class="cp-desc">interface config</span></div>
-        <div class="cp-card"><span class="t-cmd">netstat</span><span class="cp-desc">network connections</span></div>
-        <div class="cp-card"><span class="t-cmd">ping</span><span class="cp-desc">ICMP reachability</span></div>
-        <div class="cp-card"><span class="t-cmd">traceroute</span><span class="cp-desc">packet path</span></div>
-        <div class="cp-card"><span class="t-cmd">dig</span><span class="cp-desc">DNS query</span></div>
-        <div class="cp-card"><span class="t-cmd">nslookup</span><span class="cp-desc">name server lookup</span></div>
-        <div class="cp-card"><span class="t-cmd">scutil</span><span class="cp-desc">system config util</span></div>
-        <div class="cp-card"><span class="t-cmd">nc</span><span class="cp-desc">netcat swiss knife</span></div>
-        <div class="cp-card"><span class="t-cmd">networkQuality</span><span class="cp-desc">internet speed test</span></div>
-        <div class="cp-card"><span class="t-cmd">dns-sd</span><span class="cp-desc">bonjour / mDNS</span></div>
-        <div class="cp-card"><span class="t-cmd">pfctl</span><span class="cp-desc">packet filter</span></div>
-        <div class="cp-card"><span class="t-cmd">ipconfig</span><span class="cp-desc">IP config info</span></div>
-        <div class="cp-card"><span class="t-cmd">arp</span><span class="cp-desc">ARP table</span></div>
-        <div class="cp-card"><span class="t-cmd">route</span><span class="cp-desc">routing table</span></div>
+        <div class="cp-card"><span class="t-cmd">Get-ChildItem</span><span class="cp-desc">list files (gci, ls, dir)</span></div>
+        <div class="cp-card"><span class="t-cmd">Get-Content</span><span class="cp-desc">read file contents</span></div>
+        <div class="cp-card"><span class="t-cmd">Set-Content</span><span class="cp-desc">write file contents</span></div>
+        <div class="cp-card"><span class="t-cmd">Copy-Item</span><span class="cp-desc">copy files/dirs</span></div>
+        <div class="cp-card"><span class="t-cmd">Move-Item</span><span class="cp-desc">move/rename</span></div>
+        <div class="cp-card"><span class="t-cmd">Remove-Item</span><span class="cp-desc">delete files/dirs</span></div>
+        <div class="cp-card"><span class="t-cmd">Test-Path</span><span class="cp-desc">path exists check</span></div>
+        <div class="cp-card"><span class="t-cmd">New-Item</span><span class="cp-desc">create file/dir</span></div>
       </div>
       <div class="expansion-zone"></div>
     </div>
 
     <div class="cg-cat">
-      <div class="cg-label">Disk &amp; Storage</div>
+      <div class="cg-label">Process</div>
       <div class="cg-pills">
-        <div class="cp-card"><span class="t-cmd">diskutil</span><span class="cp-desc">disk management</span></div>
-        <div class="cp-card"><span class="t-cmd">hdiutil</span><span class="cp-desc">disk image tool</span></div>
-        <div class="cp-card"><span class="t-cmd">tmutil</span><span class="cp-desc">Time Machine CLI</span></div>
-        <div class="cp-card"><span class="t-cmd">asr</span><span class="cp-desc">Apple Software Restore</span></div>
-        <div class="cp-card"><span class="t-cmd">fs_usage</span><span class="cp-desc">filesystem activity</span></div>
-        <div class="cp-card"><span class="t-cmd">du</span><span class="cp-desc">disk usage</span></div>
-        <div class="cp-card"><span class="t-cmd">df</span><span class="cp-desc">disk free space</span></div>
-        <div class="cp-card"><span class="t-cmd">mount</span><span class="cp-desc">mount filesystems</span></div>
+        <div class="cp-card"><span class="t-cmd">Get-Process</span><span class="cp-desc">list processes</span></div>
+        <div class="cp-card"><span class="t-cmd">Stop-Process</span><span class="cp-desc">kill by name/id</span></div>
+        <div class="cp-card"><span class="t-cmd">Start-Process</span><span class="cp-desc">spawn process</span></div>
+        <div class="cp-card"><span class="t-cmd">Wait-Process</span><span class="cp-desc">wait for exit</span></div>
       </div>
       <div class="expansion-zone"></div>
     </div>
 
     <div class="cg-cat">
-      <div class="cg-label">System &amp; Boot</div>
+      <div class="cg-label">Network</div>
       <div class="cg-pills">
-        <div class="cp-card"><span class="t-cmd">launchctl</span><span class="cp-desc">launchd service control</span></div>
-        <div class="cp-card"><span class="t-cmd">defaults</span><span class="cp-desc">plist preferences</span></div>
-        <div class="cp-card"><span class="t-cmd">sysctl</span><span class="cp-desc">kernel parameters</span></div>
-        <div class="cp-card"><span class="t-cmd">sw_vers</span><span class="cp-desc">macOS version</span></div>
-        <div class="cp-card"><span class="t-cmd">system_profiler</span><span class="cp-desc">hardware info</span></div>
-        <div class="cp-card"><span class="t-cmd">nvram</span><span class="cp-desc">firmware variables</span></div>
-        <div class="cp-card"><span class="t-cmd">ioreg</span><span class="cp-desc">I/O registry tree</span></div>
-        <div class="cp-card"><span class="t-cmd">pmset</span><span class="cp-desc">power management</span></div>
-        <div class="cp-card"><span class="t-cmd">caffeinate</span><span class="cp-desc">prevent sleep</span></div>
-        <div class="cp-card"><span class="t-cmd">softwareupdate</span><span class="cp-desc">OS updates CLI</span></div>
-        <div class="cp-card"><span class="t-cmd">csrutil</span><span class="cp-desc">SIP control</span></div>
-        <div class="cp-card"><span class="t-cmd">bless</span><span class="cp-desc">set boot volume</span></div>
+        <div class="cp-card"><span class="t-cmd">Invoke-WebRequest</span><span class="cp-desc">HTTP request (iwr)</span></div>
+        <div class="cp-card"><span class="t-cmd">Invoke-RestMethod</span><span class="cp-desc">REST API (irm)</span></div>
+        <div class="cp-card"><span class="t-cmd">Test-NetConnection</span><span class="cp-desc">port/ping test</span></div>
+        <div class="cp-card"><span class="t-cmd">Resolve-DnsName</span><span class="cp-desc">DNS lookup</span></div>
       </div>
       <div class="expansion-zone"></div>
     </div>
 
     <div class="cg-cat">
-      <div class="cg-label">Process &amp; Performance</div>
+      <div class="cg-label">Module &amp; Command</div>
       <div class="cg-pills">
-        <div class="cp-card"><span class="t-cmd">lsof</span><span class="cp-desc">open file handles</span></div>
-        <div class="cp-card"><span class="t-cmd">pgrep</span><span class="cp-desc">find process by name</span></div>
-        <div class="cp-card"><span class="t-cmd">pkill</span><span class="cp-desc">kill by name</span></div>
-        <div class="cp-card"><span class="t-cmd">sample</span><span class="cp-desc">process profiler</span></div>
-        <div class="cp-card"><span class="t-cmd">spindump</span><span class="cp-desc">hang diagnostics</span></div>
-        <div class="cp-card"><span class="t-cmd">leaks</span><span class="cp-desc">memory leak detector</span></div>
-        <div class="cp-card"><span class="t-cmd">vmmap</span><span class="cp-desc">virtual memory map</span></div>
-        <div class="cp-card"><span class="t-cmd">heap</span><span class="cp-desc">heap usage</span></div>
-        <div class="cp-card"><span class="t-cmd">powermetrics</span><span class="cp-desc">CPU/GPU power</span></div>
-        <div class="cp-card"><span class="t-cmd">dtrace</span><span class="cp-desc">dynamic tracing</span></div>
-        <div class="cp-card"><span class="t-cmd">dtruss</span><span class="cp-desc">strace for macOS</span></div>
-        <div class="cp-card"><span class="t-cmd">footprint</span><span class="cp-desc">memory footprint</span></div>
+        <div class="cp-card"><span class="t-cmd">Get-Command</span><span class="cp-desc">find cmdlets</span></div>
+        <div class="cp-card"><span class="t-cmd">Import-Module</span><span class="cp-desc">load module</span></div>
+        <div class="cp-card"><span class="t-cmd">Get-Module</span><span class="cp-desc">list modules</span></div>
+        <div class="cp-card"><span class="t-cmd">Get-Help</span><span class="cp-desc">cmdlet help</span></div>
       </div>
       <div class="expansion-zone"></div>
     </div>
 
     <div class="cg-cat">
-      <div class="cg-label">Security &amp; Signing</div>
+      <div class="cg-label">String &amp; Data</div>
       <div class="cg-pills">
-        <div class="cp-card"><span class="t-cmd">security</span><span class="cp-desc">keychain &amp; certs</span></div>
-        <div class="cp-card"><span class="t-cmd">spctl</span><span class="cp-desc">Gatekeeper policy</span></div>
-        <div class="cp-card"><span class="t-cmd">codesign</span><span class="cp-desc">code signing</span></div>
-        <div class="cp-card"><span class="t-cmd">notarytool</span><span class="cp-desc">Apple notarization</span></div>
-        <div class="cp-card"><span class="t-cmd">stapler</span><span class="cp-desc">attach notarization</span></div>
-        <div class="cp-card"><span class="t-cmd">pkgutil</span><span class="cp-desc">package receipts</span></div>
-        <div class="cp-card"><span class="t-cmd">auditd</span><span class="cp-desc">BSM audit daemon</span></div>
-        <div class="cp-card"><span class="t-cmd">xattr</span><span class="cp-desc">extended attributes</span></div>
+        <div class="cp-card"><span class="t-cmd">Select-String</span><span class="cp-desc">grep for text</span></div>
+        <div class="cp-card"><span class="t-cmd">ConvertTo-Json</span><span class="cp-desc">object to JSON</span></div>
+        <div class="cp-card"><span class="t-cmd">ConvertFrom-Json</span><span class="cp-desc">JSON to object</span></div>
+        <div class="cp-card"><span class="t-cmd">Out-File</span><span class="cp-desc">write output</span></div>
       </div>
       <div class="expansion-zone"></div>
     </div>
 
     <div class="cg-cat">
-      <div class="cg-label">Metadata &amp; Files</div>
+      <div class="cg-label">Session &amp; Variable</div>
       <div class="cg-pills">
-        <div class="cp-card"><span class="t-cmd">mdfind</span><span class="cp-desc">Spotlight search</span></div>
-        <div class="cp-card"><span class="t-cmd">mdls</span><span class="cp-desc">metadata attributes</span></div>
-        <div class="cp-card"><span class="t-cmd">mdutil</span><span class="cp-desc">Spotlight index</span></div>
-        <div class="cp-card"><span class="t-cmd">plutil</span><span class="cp-desc">plist converter</span></div>
-        <div class="cp-card"><span class="t-cmd">PlistBuddy</span><span class="cp-desc">plist editor</span></div>
-        <div class="cp-card"><span class="t-cmd">GetFileInfo</span><span class="cp-desc">HFS+ metadata</span></div>
-        <div class="cp-card"><span class="t-cmd">SetFile</span><span class="cp-desc">set file flags</span></div>
-        <div class="cp-card"><span class="t-cmd">ditto</span><span class="cp-desc">copy with metadata</span></div>
-      </div>
-      <div class="expansion-zone"></div>
-    </div>
-
-    <div class="cg-cat">
-      <div class="cg-label">Dev &amp; Build</div>
-      <div class="cg-pills">
-        <div class="cp-card"><span class="t-cmd">xcodebuild</span><span class="cp-desc">build Xcode projects</span></div>
-        <div class="cp-card"><span class="t-cmd">xcrun</span><span class="cp-desc">run Xcode tools</span></div>
-        <div class="cp-card"><span class="t-cmd">xcode-select</span><span class="cp-desc">active toolchain</span></div>
-        <div class="cp-card"><span class="t-cmd">simctl</span><span class="cp-desc">iOS simulator</span></div>
-        <div class="cp-card"><span class="t-cmd">instruments</span><span class="cp-desc">performance profiler</span></div>
-        <div class="cp-card"><span class="t-cmd">otool</span><span class="cp-desc">object file tool</span></div>
-        <div class="cp-card"><span class="t-cmd">nm</span><span class="cp-desc">symbol table</span></div>
-        <div class="cp-card"><span class="t-cmd">lipo</span><span class="cp-desc">multi-arch binaries</span></div>
-        <div class="cp-card"><span class="t-cmd">dsymutil</span><span class="cp-desc">debug symbols</span></div>
-        <div class="cp-card"><span class="t-cmd">atos</span><span class="cp-desc">address to symbol</span></div>
-      </div>
-      <div class="expansion-zone"></div>
-    </div>
-
-    <div class="cg-cat">
-      <div class="cg-label">UI &amp; Automation</div>
-      <div class="cg-pills">
-        <div class="cp-card"><span class="t-cmd">screencapture</span><span class="cp-desc">screenshot CLI</span></div>
-        <div class="cp-card"><span class="t-cmd">say</span><span class="cp-desc">text-to-speech</span></div>
-        <div class="cp-card"><span class="t-cmd">pbcopy</span><span class="cp-desc">copy to clipboard</span></div>
-        <div class="cp-card"><span class="t-cmd">pbpaste</span><span class="cp-desc">paste from clipboard</span></div>
-        <div class="cp-card"><span class="t-cmd">open</span><span class="cp-desc">open files / URLs</span></div>
-        <div class="cp-card"><span class="t-cmd">osascript</span><span class="cp-desc">AppleScript / JXA</span></div>
-        <div class="cp-card"><span class="t-cmd">textutil</span><span class="cp-desc">doc format convert</span></div>
-        <div class="cp-card"><span class="t-cmd">automator</span><span class="cp-desc">run workflows</span></div>
-        <div class="cp-card"><span class="t-cmd">dscl</span><span class="cp-desc">directory services</span></div>
+        <div class="cp-card"><span class="t-cmd">Get-Variable</span><span class="cp-desc">list variables</span></div>
+        <div class="cp-card"><span class="t-cmd">Set-Variable</span><span class="cp-desc">set variable</span></div>
+        <div class="cp-card"><span class="t-cmd">Clear-Host</span><span class="cp-desc">clear screen (cls)</span></div>
+        <div class="cp-card"><span class="t-cmd">Get-History</span><span class="cp-desc">command history</span></div>
       </div>
       <div class="expansion-zone"></div>
     </div>
 
   </div>
-  <div class="cmd-footer-note">click any command to see the API call &nbsp;·&nbsp; 15,299 total at <code class="t-url">climan.dev/mac/&lt;cmd&gt;</code></div>
+  <div class="cmd-footer-note">click any cmdlet to see the API call &nbsp;·&nbsp; 302 total at <code class="t-url">climan.dev/pwsh/&lt;cmdlet&gt;</code> &nbsp;·&nbsp; search: <code class="t-url">climan.dev/search?q=...&amp;ns=pwsh</code></div>
 </div>
 
 
 <div class="wrap">
   <footer>
-    <div>/manpages - MIT - <a href="https://github.com/vdutts7/climan">vdutts7/climan</a></div>
+    <div>climan - MIT - <a href="https://github.com/vdutts7/climan">vdutts7/climan</a></div>
     <div><a href="https://climan.dev">climan.dev</a></div>
   </footer>
 </div>
@@ -769,7 +704,7 @@
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
   // COUNTER
-  const countTo = 15299;
+  const countTo = 302;
   const el = document.getElementById('counter');
   let started = false;
   function runCounter() {
@@ -805,7 +740,7 @@
 
       if (!isActive) {
         card.classList.add('active');
-        const curl = `curl -s climan.dev/mac/${cmd} | jq '.'`;
+        const curl = `curl -s climan.dev/pwsh/${cmd} | jq '.'`;
 
         const expand = document.createElement('div');
         expand.className = 'cp-expand';
@@ -813,7 +748,7 @@
           `<span class="t-prompt">$</span> ` +
           `<span class="t-cmd">curl</span> ` +
           `<span class="t-flag">-s</span> ` +
-          `<span class="t-url">climan.dev/mac/${cmd}</span> ` +
+          `<span class="t-url">climan.dev/pwsh/${cmd}</span> ` +
           `<span class="t-pipe">|</span> ` +
           `<span class="t-jq">jq</span> ` +
           `<span class="t-str">&#39;.&#39;</span>`;
