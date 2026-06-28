@@ -1,0 +1,4 @@
+{
+  "_about": "Execution order only. Script runs these in sequence. First success wins. No skipping. No choices.",
+  "order": ["curl", "wget", "python3_urllib", "python3_requests", "node_https"]
+}

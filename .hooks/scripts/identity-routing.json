@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.3.0",
+  "description": "Git identity routing: map provider+username to repo-local user.name/user.email. Edit routes for your remotes.",
+  "routes": [
+    {
+      "namespace": "codeberg-fakuku",
+      "host": "codeberg.org",
+      "username": "fakuku",
+      "name": "fakuku",
+      "email": "fakuku@users.noreply.codeberg.org",
+      "ssh_host_alias": "codeberg-fakuku",
+      "ssh_key_path": "$HOME/.ssh/codeberg_key"
+    },
+    {
+      "namespace": "codeberg-fakukucur",
+      "host": "codeberg.org",
+      "username": "fakukucur",
+      "name": "fakukucur",
+      "email": "fakukucur@users.noreply.codeberg.org",
+      "ssh_host_alias": "codeberg-fakukucur",
+      "ssh_key_path": "$HOME/.ssh/codeberg_fakukucur"
+    },
+    {
+      "namespace": "github-vdutts7",
+      "host": "github.com",
+      "username": "vdutts7",
+      "name": "vdutts7",
+      "email": "vdutts7@users.noreply.github.com",
+      "ssh_host_alias": "github-vdutts7",
+      "ssh_key_path": "$HOME/.ssh/github_vdutts7"
+    }
+  ],
+  "gh_cli_only": {
+    "namespace": "github-jackgofff",
+    "username": "jackgofff",
+    "purpose": "gh CLI only - not a git remote identity",
+    "token_env": "GH_CLI_TOKEN",
+    "forbidden_for": [
+      "git push",
+      "git remote origin on product repos",
+      "replacing vdutts7 ssh for github.com"
+    ]
+  },
+  "integration_sandbox": {
+    "namespace": "github-scorphx",
+    "username": "scorphx",
+    "email": "scorphx@users.noreply.github.com",
+    "purpose": "OAuth + iOS GitHub mobile for AI app integrations - NOT Mac git identity",
+    "machine_wired": false,
+    "ios_github_mobile_only": true,
+    "forbidden_for": [
+      "default Mac git push/pull",
+      "replacing vdutts7 ssh for github.com",
+      "OAuth AI apps from vdutts7"
+    ]
+  },
+  "provider_defaults": {
+    "github.com": {
+      "namespace": "github-default-vdutts7",
+      "name": "vdutts7",
+      "email": "vdutts7@users.noreply.github.com",
+      "ssh_key_path": "$HOME/.ssh/github_vdutts7"
+    },
+    "codeberg.org": {
+      "namespace": "codeberg-fakuku",
+      "name": "fakuku",
+      "email": "fakuku@users.noreply.codeberg.org",
+      "ssh_key_path": "$HOME/.ssh/codeberg_key",
+      "_warning": "Bare codeberg.org host uses default key; use ssh Host alias for alternate Codeberg identity"
+    }
+  }
+}

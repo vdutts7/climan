@@ -1,0 +1,4 @@
+{
+  "never_commands": ["security", "auth", "token", "keychain", "passwd", "fdesetup", "profiles", "tccutil"],
+  "never_substrings": ["security", "auth", "token", "keychain", "passwd", "fdesetup", "profiles"]
+}

@@ -1,0 +1,12 @@
+name = "manpages"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+account_id = "bf5b350771d692d77b5fe96fb9ac344e"
+
+[[hyperdrive]]
+binding = "HYPERDRIVE"
+id = "785119b4e5e9467ebf9a80bafedc7774"
+
+[ai]
+binding = "AI"
