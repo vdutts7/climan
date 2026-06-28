@@ -1,9 +1,11 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/powershell.webp" alt="powershell" width="80" height="80" />
+  <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/cloudflare.webp" alt="cloudflare" width="80" height="80" />
 </p>
 <h1 align="center">climan</h1>
-<p align="center">authoritative CLI docs agents can curl</p>
-<p align="center"><code>/pwsh</code> · 302 PowerShell 7.4 cmdlets · hybrid search · no API key · just curl</p>
+<p align="center"><em>authoritative CLI docs agents can curl</em></p>
+<p align="center"><code>/pwsh</code> · 302 PowerShell 7.4 cmdlets · hybrid search</p>
+<p> no API key- just curl</p>
 
 ---
 
