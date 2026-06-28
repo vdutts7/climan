@@ -1,4 +1,4 @@
-// climan.dev worker — CLI documentation hub
+// climan.dev worker - CLI documentation hub
 // all lookups and search via Azure Postgres (Hyperdrive)
 // no KV bindings
 import postgres from "postgres";
@@ -22,27 +22,32 @@ export default {
 
     if (path === "/" || path === "") {
       return json({
-        service: "climan.dev — CLI documentation hub",
+        service: "climan.dev - CLI documentation hub",
         namespaces: {
-          pwsh: "PowerShell 7.4 cmdlets (302 commands, hybrid search)",
-          mac:  "macOS man pages (coming soon)",
-          ansi: "ANSI escape sequences (coming soon)",
-          aws:  "AWS CLI (coming soon)"
+          pwsh:  "PowerShell 7.4 cmdlets (302 commands, hybrid search)",
+          kusto: "KQL / Kusto Query Language operators and functions (550 entries)",
+          mac:   "macOS man pages (coming soon)",
+          ansi:  "ANSI escape sequences (coming soon)",
+          aws:   "AWS CLI (coming soon)"
         },
         routes: [
           "GET /pwsh/{cmdlet}",
           "GET /pwsh (manifest)",
-          "GET /ps/{cmdlet|alias} (alias for /pwsh)",
+          "GET /ps/{cmdlet|alias}",
+          "GET /kusto/{operator}",
+          "GET /kusto (manifest)",
           "GET /mac/{cmd}",
           "GET /ansi/{alias}",
-          "GET /search?q=term&ns=pwsh|mac|ansi|all"
+          "GET /search?q=term&ns=pwsh|kusto|mac|ansi|all"
         ],
         search: "hybrid BM25 + dual vector (bge-base-en-v1.5 func+flags)",
         examples: [
           "/pwsh/Get-ChildItem",
           "/pwsh/gci",
+          "/kusto/where-operator",
+          "/kusto/summarize-operator",
+          "/search?q=filter+rows+by+condition&ns=kusto",
           "/search?q=find+files+recursively&ns=pwsh",
-          "/search?q=download+file+from+url&ns=pwsh",
           "/search?q=stop+process+by+name&ns=pwsh"
         ]
       });
@@ -68,6 +73,29 @@ export default {
         LIMIT 1
       `, [input], rows => {
         if (!rows.length) return notFound({ cmdlet: input });
+        return new Response(JSON.stringify(rows[0].content), { headers: HEADERS });
+      });
+    }
+
+    // /kusto manifest
+    if (path === "/kusto" || path === "/kusto/") {
+      return pgLookup(env, `
+        SELECT key, synopsis, categories
+        FROM docs WHERE ns = 'kusto'
+        ORDER BY key
+      `, [], rows => json({ namespace: "kusto", count: rows.length, operators: rows }));
+    }
+
+    // /kusto/{operator}
+    const kustoMatch = path.match(/^\/kusto\/([A-Za-z0-9%_.()\[\]:-]+)$/);
+    if (kustoMatch) {
+      const input = decodeURIComponent(kustoMatch[1]);
+      return pgLookup(env, `
+        SELECT content FROM docs
+        WHERE ns = 'kusto' AND key ILIKE $1
+        LIMIT 1
+      `, [input], rows => {
+        if (!rows.length) return notFound({ operator: input });
         return new Response(JSON.stringify(rows[0].content), { headers: HEADERS });
       });
     }

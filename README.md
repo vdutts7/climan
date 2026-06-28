@@ -106,11 +106,12 @@ npx wrangler deploy
 
 > Model: `@cf/baai/bge-base-en-v1.5` (768d, `pooling=cls`) at seed and query time
 
-## Tools Used
+## Tools used
 
 <img src="https://img.shields.io/badge/Cloudflare%20Workers-F38020?style=for-the-badge&logo=cloudflare&logoColor=white" alt="Cloudflare Workers"/>
 <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
 <img src="https://img.shields.io/badge/pgvector-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="pgvector"/>
+<img src="https://img.shields.io/badge/BM25-2563EB?style=for-the-badge" alt="BM25"/>
 
 <br/>
 
