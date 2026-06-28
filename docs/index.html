@@ -291,13 +291,30 @@
       border: 1px solid rgba(255,255,255,0.12);
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 20px rgba(0,0,0,0.35);
       font-family: var(--mono); font-size: 11.5px;
-      padding: 10px 22px; border-radius: 999px;
+      padding: 10px 16px 10px 22px; border-radius: 999px;
       transition: background .15s, border-color .15s;
+      cursor: pointer;
+      appearance: none; -webkit-appearance: none;
+      color: inherit;
     }
     .btn-g:hover {
       background: rgba(12, 12, 18, 0.82);
       border-color: rgba(255,255,255,0.2);
     }
+    .btn-g.copied {
+      border-color: rgba(74,222,128,0.35);
+      background: rgba(10, 18, 14, 0.82);
+    }
+    .btn-g-copy-icon {
+      display: flex; align-items: center; justify-content: center;
+      margin-left: 6px; padding-left: 10px;
+      border-left: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.45);
+      transition: color .15s;
+      flex-shrink: 0;
+    }
+    .btn-g:hover .btn-g-copy-icon { color: rgba(255,255,255,0.75); }
+    .btn-g.copied .btn-g-copy-icon { color: var(--green); border-left-color: rgba(74,222,128,0.25); }
     .btn-g .t-prompt { color: #64748b; font-weight: 600; }
     .btn-g .t-cmd { color: #e2e8f0; font-weight: 600; }
     .btn-g .t-flag { color: #f59e0b; font-weight: 500; }
@@ -312,23 +329,45 @@
       display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
       opacity: 0; animation: fadeUp .7s ease .86s forwards;
     }
-    .demo-block { border-radius: 8px; overflow: hidden; border: 1px solid var(--b1); }
-    .demo-block.bad  { border-color: rgba(239,68,68,.2); }
-    .demo-block.good { border-color: rgba(34,197,94,.2); }
-    .dh {
-      display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
-      padding: 8px 13px; font-size: 10px; font-weight: 700; letter-spacing: .1em;
+    .demo-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
     }
-    .demo-block.bad  .dh { background:rgba(239,68,68,.07); color:var(--red); border-bottom:1px solid rgba(239,68,68,.1); }
-    .demo-block.good .dh { background:rgba(34,197,94,.06); color:var(--green); border-bottom:1px solid rgba(34,197,94,.1); }
+    .demo-block {
+      position: relative; width: 100%; border-radius: 8px; overflow: visible;
+      background: rgba(8, 8, 12, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .demo-block.bad  { box-shadow: inset 0 2px 0 rgba(248, 113, 113, 0.55); }
+    .demo-block.good { box-shadow: inset 0 2px 0 rgba(74, 222, 128, 0.55); }
+    .demo-path-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.45));
+    }
+    .demo-block > .dh { border-radius: 8px 8px 0 0; }
+    .demo-block > .db { border-radius: 0 0 8px 8px; }
+    .dh {
+      display: flex; align-items: center; justify-content: center; gap: 7px; flex-wrap: wrap;
+      padding: 8px 13px; font-size: 10px; font-weight: 700; letter-spacing: .1em;
+      background: rgba(255, 255, 255, 0.03);
+      color: rgba(255, 255, 255, 0.55);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
     .dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
     .stag {
       font-family: var(--mono); font-size: 9.5px; font-weight: 700;
       padding: 1px 5px; border-radius: 3px; letter-spacing: 0;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.82);
     }
-    .bad  .stag { background:rgba(239,68,68,.18); border:1px solid rgba(239,68,68,.28); color:var(--red); }
-    .good .stag { background:rgba(34,197,94,.15); border:1px solid rgba(34,197,94,.25); color:var(--green); }
-    .db { background:var(--s1); padding:14px 15px; font-size:11.5px; line-height:2.1; }
+    .bad  .stag { border-color: rgba(248, 113, 113, 0.35); color: #fca5a5; }
+    .good .stag { border-color: rgba(74, 222, 128, 0.35); color: #86efac; }
+    .db { background: transparent; padding: 14px 15px; font-size: 11.5px; line-height: 2.1; }
     .pr  { color:var(--green); user-select:none; }
     .cmd { color:var(--txt); }
     .fbad { color:var(--red); }
@@ -341,12 +380,16 @@
     /* SECTIONS - F5: no numbered labels */
     .section { max-width: 860px; margin: 0 auto; padding: 80px 44px 0; }
     .sec-head {
-      font-size: 10px; font-weight: 700; letter-spacing: .15em;
+      font-size: 18px; font-weight: 700; letter-spacing: .10em;
       text-transform: uppercase; color: var(--muted);
       margin-bottom: 24px;
       display: flex; align-items: center; gap: 12px;
     }
     .sec-head::after { content:''; flex:1; height:1px; background:var(--b1); }
+    .sec-head-icon {
+      width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.08));
+    }
 
     /* ARCH - infographic glass + diagram unit ($SKILLS/visual-tokens/registry/tokens.json) */
     .diagram-container {
@@ -402,30 +445,6 @@
       border: none;
       background: transparent;
     }
-    /* diagram-legend - $SKILLS/infographic/registry/components/diagram-legend.html */
-    .dl-row {
-      display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin: 16px 0 0;
-      padding: 0 8px;
-    }
-    .dl-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--mono);
-      font-size: 10px;
-      color: var(--muted);
-    }
-    .dl-swatch {
-      width: 10px;
-      height: 10px;
-      border-radius: 2px;
-      flex-shrink: 0;
-    }
-
     .install-block { border:1px solid var(--b1); border-radius:8px; overflow:hidden; }
     .i-step { padding:20px 22px; border-bottom:1px solid var(--b1); }
     .i-step:last-child { border-bottom:none; }
@@ -494,9 +513,6 @@
     .t-slash-cmd { color: #c084fc; font-weight:600; }         /* climan slash commands */
 
     /* COMMAND GRID */
-    .cmd-intro {
-      font-size: 12px; color: #909090; margin-bottom: 28px; line-height: 1.7;
-    }
     .cmd-grid {
       display: flex; flex-direction: column; gap: 28px;
     }
@@ -646,42 +662,50 @@
              width="16" height="16" style="border-radius:3px;flex-shrink:0" alt="" />
         /climan
       </a>
-      <a href="#arch" class="btn-g">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+      <button type="button" class="btn-g hero-curl-copy" aria-label="Copy curl command to clipboard" data-copy="curl -s climan.dev/pwsh/gci | jq '.'">
         <span class="t-cmd">curl</span>
         <span class="t-flag">-s</span>
         <span class="t-url">climan.dev/pwsh/gci</span>
         <span class="t-pipe">|</span>
         <span class="t-jq">jq</span>
         <span class="t-str">&#39;.&#39;</span>
-      </a>
+        <span class="btn-g-copy-icon" aria-hidden="true">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </span>
+      </button>
     </div>
 
     <!-- F2: climan in proper code tag in both demo headers -->
     <div class="demo">
-      <div class="demo-block bad">
+      <div class="demo-col">
+        <svg class="demo-path-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" fill="rgba(220,38,38,0.25)" stroke="#f87171" stroke-width="1.8"/>
+          <path d="M8.5 8.5 L15.5 15.5 M15.5 8.5 L8.5 15.5" fill="none" stroke="#f87171" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <div class="demo-block bad">
         <div class="dh">
-          <span class="dot" style="background:var(--red)"></span>
-          WITHOUT <code class="stag">climan</code> - AGENT GUESSES
+          agent guesses
         </div>
         <div class="db">
           <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">Get-ChildItem</span> <span class="t-badflag">-RecursiveDepth</span> <span class="t-arg">.</span></div>
           <div class="t-err">Get-ChildItem: A parameter cannot be found that matches parameter name &#39;RecursiveDepth&#39;.</div>
-          <br>
-          <div class="t-cmt"># -RecursiveDepth doesn&#39;t exist. agent invented it. real flag is -Recurse.</div>
+        </div>
         </div>
       </div>
-      <div class="demo-block good">
+      <div class="demo-col">
+        <svg class="demo-path-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" fill="rgba(22,163,74,0.25)" stroke="#4ade80" stroke-width="1.8"/>
+          <path d="M7 12.5 L10.5 16 L17 9" fill="none" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="demo-block good">
         <div class="dh">
-          <span class="dot" style="background:var(--green)"></span>
-          WITH <code class="stag">climan</code> - REAL CMDLET DOCS
+          <code class="stag">/climan</code> - real cmdlet docs
         </div>
         <div class="db">
-          <div><span class="t-prompt">$</span> <span class="t-cmd">curl</span> <span class="t-flag">-s</span> <span class="t-url">&quot;climan.dev/search?q=find+files+recursively&amp;ns=pwsh&quot;</span> <span class="t-pipe">|</span> <span class="t-jq">jq</span> <span class="t-str">&#39;.results[0].key&#39;</span></div>
-          <div class="t-out"><span class="t-str">&quot;Get-ChildItem&quot;</span></div>
-          <br>
+          <div><span class="t-prompt">$</span> <span class="t-cmd">curl</span> <span class="t-flag">-s</span> <span class="t-url">climan.dev/pwsh/gci</span> <span class="t-pipe">|</span> <span class="t-jq">jq</span> <span class="t-str">&#39;.&#39;</span></div>
           <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">Get-ChildItem</span> <span class="t-flag">-Recurse</span> <span class="t-arg">.</span></div>
           <div class="t-ok">Directory: C:\Users\you\Documents</div>
+        </div>
         </div>
       </div>
     </div>
@@ -698,23 +722,19 @@
         class="arch-diagram"
         type="image/svg+xml"
         data="architecture-glass.svg"
-        aria-label="climan.dev architecture: agent curl to Postgres via Hyperdrive, hybrid search, build pipeline"
+        aria-label="climan.dev architecture: curl to CF Worker, Hyperdrive Postgres, Workers AI search embed"
         width="780"
-        height="620"
+        height="250"
       ></object>
-    </div>
-    <div class="dl-row" aria-label="Architecture legend">
-      <div class="dl-item"><div class="dl-swatch" style="background:#4ade80"></div>happy path</div>
-      <div class="dl-item"><div class="dl-swatch" style="background:#f87171"></div>egress block</div>
-      <div class="dl-item"><div class="dl-swatch" style="background:#93c5fd"></div>hybrid search</div>
-      <div class="dl-item"><div class="dl-swatch" style="background:#fbbf24"></div>build plane</div>
     </div>
   </div>
 </div>
 
 <div class="section reveal" id="commands" style="padding-bottom:0">
-  <div class="sec-head">PowerShell cmdlet library</div>
-  <p class="cmd-intro">Every card is a live API call. <code class="t-cmd">curl climan.dev/pwsh/&lt;cmdlet&gt;</code></p>
+  <div class="sec-head">
+    <img src="https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/powershell.webp" width="40" height="40" class="sec-head-icon" alt="" />
+    PowerShell cmdlet library
+  </div>
   <div class="cmd-grid" id="cmdgrid">
 
     <div class="cg-cat">
@@ -863,6 +883,26 @@
       expand?.classList.remove('copied');
     }, 1800);
   }
+
+  const HERO_COPY_SVG = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+  const HERO_OK_SVG = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+  document.querySelectorAll('.hero-curl-copy').forEach(btn => {
+    const icon = btn.querySelector('.btn-g-copy-icon');
+    btn.addEventListener('click', () => {
+      const text = btn.dataset.copy || '';
+      copyCurl(text, () => {
+        btn.classList.add('copied');
+        btn.setAttribute('aria-label', 'Copied!');
+        if (icon) icon.innerHTML = HERO_OK_SVG;
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.setAttribute('aria-label', 'Copy curl command to clipboard');
+          if (icon) icon.innerHTML = HERO_COPY_SVG;
+        }, 1800);
+      });
+    });
+  });
 
   document.querySelectorAll('.cp-card').forEach(card => {
     card.addEventListener('click', () => {

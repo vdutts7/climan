@@ -44,18 +44,9 @@ curl "https://climan.dev/search?q=download+file+from+url&ns=pwsh"
 
 ## Architecture
 
-```
-curl climan.dev/pwsh/Get-ChildItem
-  -> Cloudflare Worker
-     -> Azure Postgres (Hyperdrive)
-        -> exact lookup: SELECT content WHERE ns='pwsh' AND key ILIKE $1
-
-curl "climan.dev/search?q=find+files+recursively&ns=pwsh"
-  -> Cloudflare Worker
-     -> Workers AI: embed query (bge-base-en-v1.5, 768d, cls pooling)
-     -> Azure Postgres (Hyperdrive): hybrid BM25 + dual-vector cosine
-        -> ranked results
-```
+<p align="center">
+  <img src="docs/architecture-glass.svg" alt="climan architecture: curl to CF Worker, Hyperdrive Postgres, Workers AI search embed" width="720">
+</p>
 
 **Stack:** Cloudflare Workers + Hyperdrive · Azure Postgres 16 + pgvector · Workers AI
 
