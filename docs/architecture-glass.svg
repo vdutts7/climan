@@ -76,7 +76,7 @@
   </defs>
 
   <g id="canvas" aria-hidden="true">
-    <rect width="780" height="250" rx="10" fill="rgba(5,5,8,0.25)"/>
+    <rect width="780" height="250" rx="10" fill="#0b0c12"/>
     <rect width="780" height="250" rx="10" fill="url(#canvas-vignette)" opacity="0.85"/>
     <rect width="780" height="250" rx="10" fill="url(#canvas-glass)" opacity="0.7"/>
     <rect width="780" height="250" rx="10" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
