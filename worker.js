@@ -1,12 +1,44 @@
 // climan.dev worker - CLI documentation hub
 // all lookups and search via Azure Postgres (Hyperdrive)
-// no KV bindings
+// adding a namespace = one line in NS_CONFIG + seed script. nothing else.
 import postgres from "postgres";
+
+// ── tuning constants ──────────────────────────────────────────────────────────
+const CACHE_TTL        = 86400;   // seconds; public CDN cache on all responses
+const SEARCH_LIMIT     = 10;      // max results returned per search query
+const LOOKUP_LIMIT     = 1;       // max rows for exact key lookup
+const VEC_THRESHOLD    = 0.7;     // cosine distance cutoff for vector pre-filter
+const BM25_WEIGHT      = 0.3;     // weight for full-text rank in hybrid score
+const VEC_WEIGHT       = 0.7;     // weight for vector rank in hybrid score
+const SCORE_DECIMALS   = 4;       // decimal places in ROUND(score)
+const PG_POOL_SIZE     = 1;       // postgres connections per Worker invocation
+const EMBED_MODEL      = "@cf/baai/bge-base-en-v1.5";
+const EMBED_POOLING    = "cls";
+
+// ── namespace registry ────────────────────────────────────────────────────────
+// keyPrefix: prepended to path segments to build the DB key
+//   az:   /az/vm/create        → "az " + "vm create"      = "az vm create"
+//   pwsh: /pwsh/Get-ChildItem  → ""   + "Get-ChildItem"   = "Get-ChildItem"
+// aliasCol: true = also match against aliases[] column
+const NS_CONFIG = {
+  pwsh:  { label: "cmdlets",   keyPrefix: "",    aliasCol: true  },
+  kusto: { label: "operators", keyPrefix: "",    aliasCol: false },
+  az:    { label: "commands",  keyPrefix: "az ", aliasCol: false },
+  mac:   { label: "commands",  keyPrefix: "",    aliasCol: false },
+  ansi:  { label: "sequences", keyPrefix: "",    aliasCol: true  },
+};
+
+const KNOWN_NS = new Set(Object.keys(NS_CONFIG));
 
 const HEADERS = {
   "content-type": "application/json",
   "access-control-allow-origin": "*",
-  "cache-control": "public, max-age=86400"
+  "cache-control": `public, max-age=${CACHE_TTL}`
+};
+
+const HEADERS_TEXT = {
+  "content-type": "text/plain",
+  "cache-control": `public, max-age=${CACHE_TTL}`
 };
 
 export default {
@@ -14,135 +46,36 @@ export default {
     const url  = new URL(request.url);
     const path = url.pathname;
 
+    // ── robots.txt ────────────────────────────────────────────────────────────
     if (path === "/robots.txt") {
-      return new Response("User-agent: *\nAllow: /\n", {
-        headers: { "content-type": "text/plain", "cache-control": "public, max-age=86400" }
-      });
+      return new Response("User-agent: *\nAllow: /\n", { headers: HEADERS_TEXT });
     }
 
+    // ── root ──────────────────────────────────────────────────────────────────
     if (path === "/" || path === "") {
       return json({
         service: "climan.dev - CLI documentation hub",
-        namespaces: {
-          pwsh:  "PowerShell 7.4 cmdlets (302 commands, hybrid search)",
-          kusto: "KQL / Kusto Query Language operators and functions (550 entries)",
-          mac:   "macOS man pages (coming soon)",
-          ansi:  "ANSI escape sequences (coming soon)",
-          aws:   "AWS CLI (coming soon)"
-        },
+        namespaces: Object.fromEntries(
+          Object.entries(NS_CONFIG).map(([ns, c]) => [ns, c.label])
+        ),
         routes: [
-          "GET /pwsh/{cmdlet}",
-          "GET /pwsh (manifest)",
-          "GET /ps/{cmdlet|alias}",
-          "GET /kusto/{operator}",
-          "GET /kusto (manifest)",
-          "GET /mac/{cmd}",
-          "GET /ansi/{alias}",
-          "GET /search?q=term&ns=pwsh|kusto|mac|ansi|all"
+          "GET /{ns}           manifest",
+          "GET /{ns}/{key}     exact lookup",
+          "GET /search?q=&ns= hybrid BM25 + vector search",
         ],
-        search: "hybrid BM25 + dual vector (bge-base-en-v1.5 func+flags)",
         examples: [
           "/pwsh/Get-ChildItem",
-          "/pwsh/gci",
           "/kusto/where-operator",
-          "/kusto/summarize-operator",
-          "/search?q=filter+rows+by+condition&ns=kusto",
+          "/az/vm/create",
+          "/az/storage/blob/upload",
           "/search?q=find+files+recursively&ns=pwsh",
-          "/search?q=stop+process+by+name&ns=pwsh"
+          "/search?q=scale+down+kubernetes+nodes&ns=az",
+          "/search?q=filter+rows+by+condition&ns=kusto",
         ]
       });
     }
 
-    // /pwsh manifest
-    if (path === "/pwsh" || path === "/pwsh/" || path === "/ps" || path === "/ps/") {
-      return pgLookup(env, `
-        SELECT key, synopsis, categories, aliases, module
-        FROM docs WHERE ns = 'pwsh'
-        ORDER BY key
-      `, [], rows => json({ namespace: "pwsh", count: rows.length, cmdlets: rows }));
-    }
-
-    // /pwsh/{cmdlet} and /ps/{cmdlet}
-    const pwshMatch = path.match(/^\/(?:pwsh|ps)\/([A-Za-z0-9%_.:-]+)$/);
-    if (pwshMatch) {
-      const input = decodeURIComponent(pwshMatch[1]);
-      return pgLookup(env, `
-        SELECT content FROM docs
-        WHERE ns = 'pwsh'
-          AND (key ILIKE $1 OR lower($1::text) = ANY(aliases))
-        LIMIT 1
-      `, [input], rows => {
-        if (!rows.length) return notFound({ cmdlet: input });
-        return new Response(JSON.stringify(rows[0].content), { headers: HEADERS });
-      });
-    }
-
-    // /kusto manifest
-    if (path === "/kusto" || path === "/kusto/") {
-      return pgLookup(env, `
-        SELECT key, synopsis, categories
-        FROM docs WHERE ns = 'kusto'
-        ORDER BY key
-      `, [], rows => json({ namespace: "kusto", count: rows.length, operators: rows }));
-    }
-
-    // /kusto/{operator}
-    const kustoMatch = path.match(/^\/kusto\/([A-Za-z0-9%_.()\[\]:-]+)$/);
-    if (kustoMatch) {
-      const input = decodeURIComponent(kustoMatch[1]);
-      return pgLookup(env, `
-        SELECT content FROM docs
-        WHERE ns = 'kusto' AND key ILIKE $1
-        LIMIT 1
-      `, [input], rows => {
-        if (!rows.length) return notFound({ operator: input });
-        return new Response(JSON.stringify(rows[0].content), { headers: HEADERS });
-      });
-    }
-
-    // /mac manifest
-    if (path === "/mac" || path === "/mac/") {
-      return pgLookup(env, `
-        SELECT key, synopsis FROM docs WHERE ns = 'mac' ORDER BY key
-      `, [], rows => json({ namespace: "mac", count: rows.length, commands: rows }));
-    }
-
-    // /mac/{cmd} and /man/{cmd} legacy
-    const macMatch = path.match(/^\/(?:mac|man)\/([a-zA-Z0-9_.:-]+)$/);
-    if (macMatch) {
-      const input = macMatch[1].toLowerCase();
-      return pgLookup(env, `
-        SELECT content FROM docs
-        WHERE ns = 'mac' AND key ILIKE $1
-        LIMIT 1
-      `, [input], rows => {
-        if (!rows.length) return notFound({ cmd: input });
-        return new Response(JSON.stringify(rows[0].content), { headers: HEADERS });
-      });
-    }
-
-    // /ansi manifest
-    if (path === "/ansi" || path === "/ansi/") {
-      return pgLookup(env, `
-        SELECT key, synopsis, categories FROM docs WHERE ns = 'ansi' ORDER BY key
-      `, [], rows => json({ namespace: "ansi", count: rows.length, sequences: rows }));
-    }
-
-    // /ansi/{alias}
-    const ansiMatch = path.match(/^\/ansi\/(.+)$/);
-    if (ansiMatch) {
-      const input = decodeURIComponent(ansiMatch[1]);
-      return pgLookup(env, `
-        SELECT content FROM docs
-        WHERE ns = 'ansi' AND (key = $1 OR $1 = ANY(aliases))
-        LIMIT 1
-      `, [input], rows => {
-        if (!rows.length) return notFound({ alias: input });
-        return new Response(JSON.stringify(rows[0].content), { headers: HEADERS });
-      });
-    }
-
-    // /search
+    // ── /search ───────────────────────────────────────────────────────────────
     if (path === "/search") {
       const q   = (url.searchParams.get("q") || "").trim();
       const ns  = (url.searchParams.get("ns") || "pwsh").toLowerCase();
@@ -153,25 +86,78 @@ export default {
       return searchHybrid(q, qSafe, ns, cat, env);
     }
 
-    return notFound({});
+    // ── /{ns} and /{ns}/{...rest} ─────────────────────────────────────────────
+    const parts = path.replace(/^\//, "").split("/");
+    const ns    = parts[0].toLowerCase();
+
+    if (!KNOWN_NS.has(ns)) return notFound({ path });
+
+    const cfg = NS_CONFIG[ns];
+
+    // manifest: GET /{ns} or GET /{ns}/
+    if (parts.length === 1 || (parts.length === 2 && parts[1] === "")) {
+      // az: too many rows for flat list - return service group breakdown
+      if (ns === "az") {
+        return pgLookup(env, `
+          SELECT
+            split_part(key, ' ', 2)   AS service,
+            count(*)::int             AS count,
+            min(synopsis)             AS sample_synopsis
+          FROM docs WHERE ns = 'az'
+          GROUP BY service ORDER BY service
+        `, [], rows => json({
+          namespace: "az",
+          total: rows.reduce((s, r) => s + r.count, 0),
+          services: rows,
+          usage: "GET /az/{service}/{command}  e.g. /az/vm/create"
+        }));
+      }
+      return pgLookup(env, `
+        SELECT key, synopsis, categories FROM docs
+        WHERE ns = $1 ORDER BY key
+      `, [ns], rows => json({ namespace: ns, count: rows.length, [cfg.label]: rows }));
+    }
+
+    // exact lookup: GET /{ns}/{...rest}
+    const segments = parts.slice(1).map(s => decodeURIComponent(s).trim()).filter(Boolean);
+    const key = cfg.keyPrefix + segments.join(" ");
+
+    if (cfg.aliasCol) {
+      return pgLookup(env, `
+        SELECT content FROM docs
+        WHERE ns = $1 AND (key ILIKE $2 OR lower($2::text) = ANY(aliases))
+        LIMIT ${LOOKUP_LIMIT}
+      `, [ns, key], rows => {
+        if (!rows.length) return notFound({ ns, key });
+        return new Response(JSON.stringify(rows[0].content), { headers: HEADERS });
+      });
+    }
+
+    return pgLookup(env, `
+      SELECT content FROM docs
+      WHERE ns = $1 AND key = $2
+      LIMIT ${LOOKUP_LIMIT}
+    `, [ns, key], rows => {
+      if (!rows.length) return notFound({ ns, key });
+      return new Response(JSON.stringify(rows[0].content), { headers: HEADERS });
+    });
   }
 };
 
+// ── hybrid search ─────────────────────────────────────────────────────────────
 async function searchHybrid(q, qSafe, ns, cat, env) {
   try {
-    const embResult = await env.AI.run("@cf/baai/bge-base-en-v1.5", {
-      text: [q],
-      pooling: "cls"
+    const embResult = await env.AI.run(EMBED_MODEL, {
+      text: [q], pooling: EMBED_POOLING
     });
     const vecStr = "[" + embResult.data[0].join(",") + "]";
-
-    const sql = postgres(env.HYPERDRIVE.connectionString, { max: 1 });
+    const sql    = postgres(env.HYPERDRIVE.connectionString, { max: PG_POOL_SIZE });
 
     const nsFilter  = ns === "all" ? sql`` : sql`AND ns = ${ns}`;
     const catFilter = cat ? sql`AND ${cat} = ANY(categories)` : sql``;
 
     const rows = await sql`
-      SELECT ns, key, synopsis, categories, module,
+      SELECT ns, key, synopsis, categories,
         ROUND((
           ts_rank(
             to_tsvector('english',
@@ -180,12 +166,12 @@ async function searchHybrid(q, qSafe, ns, cat, env) {
               coalesce(embed_flags,'')
             ),
             plainto_tsquery(${qSafe})
-          ) * 0.3 +
+          ) * ${BM25_WEIGHT} +
           GREATEST(
             (1 - (vec_func  <=> ${vecStr}::vector)),
             (1 - (vec_flags <=> ${vecStr}::vector))
-          ) * 0.7
-        )::numeric, 4) AS score
+          ) * ${VEC_WEIGHT}
+        )::numeric, ${SCORE_DECIMALS}) AS score
       FROM docs
       WHERE 1=1
         ${nsFilter}
@@ -196,11 +182,11 @@ async function searchHybrid(q, qSafe, ns, cat, env) {
             coalesce(embed_func,'') || ' ' ||
             coalesce(embed_flags,'')
           ) @@ plainto_tsquery(${qSafe})
-          OR (vec_func  <=> ${vecStr}::vector) < 0.5
-          OR (vec_flags <=> ${vecStr}::vector) < 0.5
+          OR (vec_func  <=> ${vecStr}::vector) < ${VEC_THRESHOLD}
+          OR (vec_flags <=> ${vecStr}::vector) < ${VEC_THRESHOLD}
         )
       ORDER BY score DESC
-      LIMIT 10
+      LIMIT ${SEARCH_LIMIT}
     `;
 
     await sql.end();
@@ -214,9 +200,10 @@ async function searchHybrid(q, qSafe, ns, cat, env) {
   }
 }
 
+// ── db helper ─────────────────────────────────────────────────────────────────
 async function pgLookup(env, query, params, handler) {
   try {
-    const sql  = postgres(env.HYPERDRIVE.connectionString, { max: 1 });
+    const sql  = postgres(env.HYPERDRIVE.connectionString, { max: PG_POOL_SIZE });
     const rows = await sql.unsafe(query, params);
     await sql.end();
     return handler(rows);
@@ -231,10 +218,6 @@ async function pgLookup(env, query, params, handler) {
 function json(obj) {
   return new Response(JSON.stringify(obj), { headers: HEADERS });
 }
-
 function notFound(extra) {
-  return new Response(
-    JSON.stringify({ error: "not found", ...extra }),
-    { status: 404, headers: HEADERS }
-  );
+  return new Response(JSON.stringify({ error: "not found", ...extra }), { status: 404, headers: HEADERS });
 }
