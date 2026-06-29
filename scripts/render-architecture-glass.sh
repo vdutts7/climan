@@ -6,9 +6,12 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SPEC="$ROOT/docs/architecture-glass.spec.json"
 VT="${SKILLS:-$HOME/claude-ai/skills}/visual-tokens"
-RENDER=(python3 "$VT/scripts/render_glass_card.py" --compose)
+APPEND="$ROOT/docs/architecture-glass.append.css"
 
-"${RENDER[@]}" "$SPEC" --out "$ROOT/docs/architecture-glass.svg"
+python3 "$VT/scripts/render_glass_card.py" \
+  --compose "$SPEC" \
+  --styles-append "$APPEND" \
+  --out "$ROOT/docs/architecture-glass.svg"
 
 STATIC="$(mktemp "${TMPDIR:-/tmp}/architecture-glass-static.XXXXXX.json")"
 trap 'rm -f "$STATIC"' EXIT
@@ -21,6 +24,9 @@ spec["flow"] = flow
 json.dump(spec, open(sys.argv[2], "w"), indent=2)
 PY
 
-"${RENDER[@]}" "$STATIC" --out "$ROOT/docs/architecture-glass-static.svg"
+python3 "$VT/scripts/render_glass_card.py" \
+  --compose "$STATIC" \
+  --styles-append "$APPEND" \
+  --out "$ROOT/docs/architecture-glass-static.svg"
 echo "wrote $ROOT/docs/architecture-glass.svg"
 echo "wrote $ROOT/docs/architecture-glass-static.svg"

@@ -1,0 +1,14 @@
+/* climan landing - flow status legibility (consumer append; not canonical defaults) */
+.vt-diagram-flow-status {
+  letter-spacing: 0.04em;
+  fill: #94a3b8;
+}
+
+.vt-diagram-flow-status-active--success {
+  fill: #86efac;
+  font-weight: 600;
+}
+
+.vt-diagram-flow-status-active--failure {
+  font-weight: 600;
+}

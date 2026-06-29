@@ -187,7 +187,8 @@
       pointer-events: none;
     }
     .wrap a, .wrap button, .wrap .btn-p, .wrap .btn-g,
-    .wrap .cp-card, .wrap .cp-copy-hint, .wrap .demo-block {
+    .wrap .cp-card, .wrap .cp-copy-hint, .wrap .demo-block,
+    .wrap .skill-pill-wrap, .wrap .skill-pill-menu a {
       pointer-events: auto;
     }
 
@@ -289,6 +290,65 @@
       background: rgba(12, 12, 18, 0.88);
       border-color: rgba(255,255,255,0.22);
       transform: translateY(-1px);
+    }
+    .skill-pill-wrap {
+      position: relative;
+    }
+    .skill-pill-wrap .btn-p {
+      cursor: pointer;
+      border: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .skill-pill-wrap .btn-p[aria-expanded="true"] {
+      border-color: rgba(255,255,255,0.28);
+      background: rgba(12, 12, 18, 0.92);
+    }
+    .skill-pill-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      min-width: 168px;
+      padding: 6px;
+      border-radius: 10px;
+      background: rgba(8, 8, 12, 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-4px);
+      transition: opacity .15s ease, transform .15s ease, visibility .15s;
+      z-index: 40;
+    }
+    .skill-pill-wrap.open .skill-pill-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .skill-pill-menu a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 7px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--txt);
+      transition: background .12s, color .12s;
+    }
+    .skill-pill-menu a:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+    .skill-pill-menu a svg {
+      flex-shrink: 0;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .skill-pill-menu a:hover svg {
+      color: rgba(255, 255, 255, 0.85);
     }
     .btn-g {
       display: flex; align-items: center; gap: 8px;
@@ -641,8 +701,6 @@
            width="68" height="68" style="border-radius:16px;flex-shrink:0;filter:drop-shadow(0 0 24px rgba(255,255,255,0.1))" alt="Claude" />
     </div>
 
-    <div class="eyebrow">curl-able CLI truth for agents</div>
-
     <h1><em>curl-able CLI</em><br>truth for your agents,<br><em style="text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px">not guesses</em></h1>
 
     <p class="hero-sub">
@@ -664,11 +722,19 @@
 
     <!-- F4 + F6: glass, no "skill" word -->
     <div class="btns">
-      <a href="#commands" class="btn-p">
-        <img src="https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/claude.webp"
-             width="16" height="16" style="border-radius:3px;flex-shrink:0" alt="" />
-        /climan
-      </a>
+      <div class="skill-pill-wrap" id="skill-pill">
+        <button type="button" class="btn-p" aria-expanded="false" aria-haspopup="true" aria-controls="skill-pill-menu" id="skill-pill-btn">
+          <img src="https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/claude.webp"
+               width="16" height="16" style="border-radius:3px;flex-shrink:0" alt="" />
+          /climan
+        </button>
+        <div class="skill-pill-menu" id="skill-pill-menu" role="menu" aria-label="/climan actions">
+          <a href="https://github.com/vdutts7/climan" target="_blank" rel="noopener" role="menuitem">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            view skill
+          </a>
+        </div>
+      </div>
       <button type="button" class="btn-g hero-curl-copy" aria-label="Copy curl command to clipboard" data-copy="curl -s climan.dev/pwsh/gci | jq '.'">
         <span class="t-cmd">curl</span>
         <span class="t-flag">-s</span>
@@ -888,6 +954,26 @@
 
   const HERO_COPY_SVG = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
   const HERO_OK_SVG = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+  const skillPill = document.getElementById('skill-pill');
+  const skillPillBtn = document.getElementById('skill-pill-btn');
+  if (skillPill && skillPillBtn) {
+    const closeSkillPill = () => {
+      skillPill.classList.remove('open');
+      skillPillBtn.setAttribute('aria-expanded', 'false');
+    };
+    skillPillBtn.addEventListener('click', ev => {
+      ev.stopPropagation();
+      const open = skillPill.classList.toggle('open');
+      skillPillBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.addEventListener('click', ev => {
+      if (!skillPill.contains(ev.target)) closeSkillPill();
+    });
+    document.addEventListener('keydown', ev => {
+      if (ev.key === 'Escape') closeSkillPill();
+    });
+  }
 
   document.querySelectorAll('.hero-curl-copy').forEach(btn => {
     const icon = btn.querySelector('.btn-g-copy-icon');

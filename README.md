@@ -35,15 +35,17 @@
 | `/az` | Azure CLI (azure-docs-cli YAML) | 12,986 | hybrid | live |
 | `/mac` | macOS man pages | - | - | planned |
 | `/gh` | GitHub CLI | - | - | planned |
+| `/msgraph` | Microsoft Graph API | - | - | planned |
+
 
 ## Architecture
 
 | layer | components |
 |---|---|
-| edge | Cloudflare Workers + Hyperdrive |
+| edge | Cloudflare Workers + Cloudflare Hyperdrive |
 | data | Azure Postgres 16 + pgvector |
 | search embed | Workers AI `bge-base-en-v1.5` |
-| storage policy | no KV; one `docs` table, all namespaces |
+| storage policy | one `docs` table in Azure Postgres for all namespaces |
 
 ## API
 

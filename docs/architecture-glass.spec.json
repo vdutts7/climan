@@ -14,6 +14,11 @@
       "loop_pause_s": 0.688,
       "restart_delay_ms": 250
     },
+    "typography": {
+      "status_font_size_px": 20,
+      "status_font_weight": 600,
+      "status_band_h": 72
+    },
     "hops": [
       { "edge": 0, "text": "Workers AI - embed · search → CF Worker" },
       { "edge": 1, "text": "curl climan.dev/pwsh/gci - exact lookup request" },
