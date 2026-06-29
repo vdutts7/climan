@@ -230,3 +230,18 @@ Applied to raw `cmd` dict before `json.dumps`; pre-built `func_texts[i]` / `flag
 1. per-batch pickle cache with atomic `tmp → rename` writes (WARCH-014)
 2. survives interruption at any batch boundary
 3. re-running loads from cache, skips embedding, goes straight to insert
+
+---
+
+## Known gaps (triaged, not yet implemented)
+
+Identified by running a real agent session against the live API. Ranked by ROI.
+
+**#1 - Cross-namespace equivalents column**
+Query "pwsh analogue of sort -hr" fails because `Sort-Object` docs never say "sort -hr". Microsoft's pwsh docs contain phrases like "Similar to the Unix ls command" and "like grep" - one regex pass over the 302 records extracts most mappings for free. Add an `equivalents TEXT[]` column, populate it, include it in `embed_func` and the BM25 tsvector. Makes cross-CLI translation queries work lexically, not just semantically.
+
+**#2 - Per-namespace score normalization**
+BM25 IDF skews with corpus size. pwsh has 302 records, az has 12,986 - a score of 0.59 means different things in each. Fixed score bands in the API response become misleading for cross-ns queries. Fix: divide each result's score by the top-1 score within that ns result set, or z-score against the bottom-10 mean. Makes score thresholds portable across namespaces.
+
+**#3 - Examples and parameter prose folded into embed_func**
+"How do I sort descending" - the answer (`-Descending`) lives in the parameter description and examples block, not in the synopsis. `embed_flags` covers parameter names and types but not prose descriptions or examples. Either add a third `vec_examples` vector or concatenate examples + parameter prose into `embed_func` at seed time. Currently underweighted - examples are where the natural-language verb→syntax mapping lives.
