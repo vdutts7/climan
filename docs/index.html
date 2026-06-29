@@ -253,8 +253,12 @@
       opacity: 0; animation: fadeUp .6s ease .62s forwards;
     }
     .stat-card {
-      background: var(--s1); border: 1px solid var(--b1);
-      border-radius: 6px; padding: 14px 10px; text-align: center;
+      background: rgba(10, 10, 14, 0.45);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      border-radius: 8px; padding: 14px 10px; text-align: center;
     }
     .stat-card-n {
       font-family: var(--mono); font-size: 24px; font-weight: 700;
@@ -367,7 +371,8 @@
     }
     .bad  .stag { border-color: rgba(248, 113, 113, 0.35); color: #fca5a5; }
     .good .stag { border-color: rgba(74, 222, 128, 0.35); color: #86efac; }
-    .db { background: transparent; padding: 14px 15px; font-size: 11.5px; line-height: 2.1; }
+    .db { background: transparent; padding: 14px 15px; font-size: 11.5px; line-height: 2.1; min-height: 88px; }
+    .demo-row { min-height: 2.1em; }
     .pr  { color:var(--green); user-select:none; }
     .cmd { color:var(--txt); }
     .fbad { color:var(--red); }
@@ -438,7 +443,7 @@
     }
     .arch-diagram {
       width: 100%;
-      max-width: 780px;
+      max-width: 970px;
       height: auto;
       display: block;
       margin: 0 auto;
@@ -683,12 +688,10 @@
           <path d="M8.5 8.5 L15.5 15.5 M15.5 8.5 L8.5 15.5" fill="none" stroke="#f87171" stroke-width="2.2" stroke-linecap="round"/>
         </svg>
         <div class="demo-block bad">
-        <div class="dh">
-          agent guesses
-        </div>
+        <div class="dh">without /climan</div>
         <div class="db">
-          <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">Get-ChildItem</span> <span class="t-badflag">-RecursiveDepth</span> <span class="t-arg">.</span></div>
-          <div class="t-err">Get-ChildItem: A parameter cannot be found that matches parameter name &#39;RecursiveDepth&#39;.</div>
+          <div class="demo-row"><span class="t-prompt">PS&gt;</span> <span class="t-cmd">Get-ChildItem</span> <span class="t-badflag">-RecursiveDepth</span> <span class="t-arg">.</span></div>
+          <div class="demo-row t-err">Get-ChildItem: A parameter cannot be found that matches parameter name &#39;RecursiveDepth&#39;.</div>
         </div>
         </div>
       </div>
@@ -698,13 +701,10 @@
           <path d="M7 12.5 L10.5 16 L17 9" fill="none" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         <div class="demo-block good">
-        <div class="dh">
-          <code class="stag">/climan</code> - real cmdlet docs
-        </div>
+        <div class="dh">with /climan</div>
         <div class="db">
-          <div><span class="t-prompt">$</span> <span class="t-cmd">curl</span> <span class="t-flag">-s</span> <span class="t-url">climan.dev/pwsh/gci</span> <span class="t-pipe">|</span> <span class="t-jq">jq</span> <span class="t-str">&#39;.&#39;</span></div>
-          <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">Get-ChildItem</span> <span class="t-flag">-Recurse</span> <span class="t-arg">.</span></div>
-          <div class="t-ok">Directory: C:\Users\you\Documents</div>
+          <div class="demo-row"><span class="t-prompt">PS&gt;</span> <span class="t-cmd">Get-ChildItem</span> <span class="t-flag">-Recurse</span> <span class="t-arg">.</span></div>
+          <div class="demo-row t-ok">Directory: C:\Users\you\Documents</div>
         </div>
         </div>
       </div>
@@ -723,8 +723,8 @@
         type="image/svg+xml"
         data="architecture-glass.svg"
         aria-label="climan.dev architecture: curl to CF Worker, Hyperdrive Postgres, Workers AI search embed"
-        width="780"
-        height="250"
+        width="970"
+        height="642"
       ></object>
     </div>
   </div>

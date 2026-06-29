@@ -1,0 +1,69 @@
+{
+  "canvas": { "width": 970, "height": 642 },
+  "canvas_background": "full",
+  "_layout": {
+    "w": 160,
+    "gap_y": 40,
+    "sat_y": 42,
+    "row_y": 242,
+    "note": "row_y = sat_y + w + gap_y = 42 + 160 + 40. Old row_y=185 caused 17px overlap (sat bottom 202 > row top 185)."
+  },
+  "cards": [
+    {
+      "layout": "horizontal",
+      "variant": "satellite",
+      "x": 245,
+      "y": 42,
+      "title": "Workers AI",
+      "footer": "embed · search",
+      "icon_url": "https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/cloudflare-workers.webp"
+    },
+    {
+      "layout": "vertical",
+      "variant": "primary",
+      "x": 45,
+      "y": 242,
+      "title": "curl",
+      "footer": "climan.dev/pwsh/gci",
+      "icon_url": "https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/claude.webp"
+    },
+    {
+      "layout": "horizontal",
+      "variant": "primary",
+      "x": 245,
+      "y": 242,
+      "title": "climan.dev",
+      "footer": "CF Worker",
+      "icon_url": "https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/cloudflare.webp"
+    },
+    {
+      "layout": "vertical",
+      "variant": "primary",
+      "x": 605,
+      "y": 242,
+      "title": "Azure PG",
+      "footer": "Hyperdrive · pgvector",
+      "icon_url": "https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/microsoft-azure.webp"
+    },
+    {
+      "layout": "vertical",
+      "variant": "primary",
+      "x": 805,
+      "y": 242,
+      "title": "JSON",
+      "footer": "200 OK",
+      "glyph": "{ }"
+    }
+  ],
+  "edges": [
+    { "class": "vt-diagram-edge-satellite", "d": "M405 202 L405 242" },
+    { "class": "vt-diagram-edge", "d": "M205 482 L245 482" },
+    { "class": "vt-diagram-edge", "d": "M565 482 L605 482" },
+    { "class": "vt-diagram-edge", "d": "M765 482 L805 482" }
+  ],
+  "particles": [
+    { "path": "M205,482 L245,482" },
+    { "path": "M565,482 L605,482" },
+    { "path": "M765,482 L805,482" }
+  ]
+}
