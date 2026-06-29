@@ -10,7 +10,7 @@
 ---
 
 <p align="center">
-  <img src="docs/architecture-glass.svg" alt="climan architecture: curl to CF Worker, Hyperdrive Postgres, Workers AI search embed" width="720" />
+  <img src="docs/architecture-glass-static.svg" alt="climan architecture: curl to CF Worker, Hyperdrive Postgres, Workers AI search embed" width="720" />
 </p>
 
 ## Problem
