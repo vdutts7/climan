@@ -4,6 +4,7 @@
   <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/microsoft-azure.webp" alt="azure" width="80" height="80" />
 </p>
 <h1 align="center">climan</h1>
+<p align="center"><a href="https://vdutts7.github.io/climan/">vdutts7.github.io/climan/</a></p>
 <p align="center">curl-able CLI truth for agents → <a href="https://climan.dev">climan.dev</a></p>
 <p align="center">hybrid semantic search; no API key- just curl</p>
 
