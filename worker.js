@@ -81,7 +81,7 @@ export default {
       const ns  = (url.searchParams.get("ns") || "all").toLowerCase();
       const cat = url.searchParams.get("cat") || null;
       if (!q) return new Response('{"error":"missing q param"}', { status: 400, headers: HEADERS });
-      const qSafe = q.replace(/[|&!():*]/g, " ").trim();
+      const qSafe = q.replace(/[|&!():*]/g, " ").replace(/-(?=[a-zA-Z])/g, " ").trim();
       if (!qSafe) return json({ query: q, count: 0, results: [] });
       return searchHybrid(q, qSafe, ns, cat, env);
     }
