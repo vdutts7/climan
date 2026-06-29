@@ -46,7 +46,9 @@
       "y": 242,
       "title": "climan.dev",
       "footer": "CF Worker",
-      "icon_url": "https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/cloudflare.webp"
+      "icon_url": "https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/cloudflare.webp",
+      "icon_pad_pct": 0.138,
+      "_icon_note": "cloudflare.webp is 400px full-bleed; pad matches squircle 1024 assets (Workers AI)"
     },
     {
       "layout": "vertical",
