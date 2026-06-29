@@ -10,7 +10,7 @@ LLMs hallucinate CLI flags and syntax. Training data drifts; vendor documentatio
 climan.dev/{namespace}/{key}
 ```
 
-- **namespace** routes to a corpus (`/pwsh`, `/ps` alias)
+- **namespace** routes to a corpus (`/pwsh`, `/kusto`, `/az`, ...)
 - **exact lookups** → Azure Postgres via Hyperdrive (~80-120ms)
 - **hybrid search** → same Postgres path, BM25 + dual-vector cosine
 - **no auth on read path**; operator credentials only for seed/deploy
@@ -20,51 +20,56 @@ climan.dev/{namespace}/{key}
 ```
 GET /pwsh/Get-ChildItem
   → Worker → Hyperdrive → Postgres SELECT content WHERE ns='pwsh' AND key ILIKE $1 → JSONB
-```
 
-```
-GET /pwsh/gci
-  → Worker → alias resolution (aliases[] column) → same row as Get-ChildItem → JSONB
+GET /az/vm/create
+  → Worker → key = "az " + "vm create" → Postgres SELECT content WHERE ns='az' AND key = $1 → JSONB
 ```
 
 ## Request flow - hybrid search
 
 ```
-GET /search?q=kill+a+process+by+name&ns=pwsh
+GET /search?q=scale+down+kubernetes+nodes&ns=az
   → Worker
     → Workers AI: embed query → float[768] (bge-base-en-v1.5, cls pooling)
     → Hyperdrive → Azure Postgres:
         SELECT key, synopsis, score
         FROM docs
-        WHERE ns = 'pwsh'
-          AND (BM25 match OR vec_func distance < 0.5 OR vec_flags distance < 0.5)
+        WHERE ns = 'az'
+          AND (BM25 match OR vec_func distance < 0.7 OR vec_flags distance < 0.7)
         ORDER BY (BM25 * 0.3 + GREATEST(vec_func, vec_flags) * 0.7) DESC
         LIMIT 10
-    → JSON ranked results (Stop-Process score ~0.76)
+    → JSON ranked results
 ```
+
+## Namespace registry
+
+Routing is data-driven. Adding a namespace is one line in `NS_CONFIG`:
+
+```js
+const NS_CONFIG = {
+  pwsh:  { label: "cmdlets",   keyPrefix: "",    aliasCol: true  },
+  kusto: { label: "operators", keyPrefix: "",    aliasCol: false },
+  az:    { label: "commands",  keyPrefix: "az ", aliasCol: false },
+  // add new namespace here
+};
+```
+
+`keyPrefix` handles namespaces where the DB key includes the binary name (`az vm create`).
+`aliasCol` enables alias resolution (`gci` → `Get-ChildItem`).
+
+`/search?ns={ns}` works automatically for any seeded namespace - no worker changes needed.
 
 ## Storage
 
-| Route | Backend | Algorithm |
-|-------|---------|-----------|
-| `/pwsh/{cmdlet}` | Postgres `docs` `ns='pwsh'` | exact + alias ILIKE |
-| `/ps/{cmdlet}` | same | alias route for `/pwsh` |
-| `/search?ns=pwsh` | Postgres `docs` | hybrid BM25 + dual-vector |
+One table, all namespaces.
 
-No KV. One table, all routes.
+| namespace | records | notes |
+|-----------|---------|-------|
+| `pwsh` | 302 | PowerShell 7.4 cmdlets, alias column populated |
+| `kusto` | 550 | KQL operators and functions |
+| `az` | 12,986 | Azure CLI commands, keyed as `az {service} {command}` |
 
-## Adding a namespace branch
-
-1. Enrich source records → `seed_{ns}.py` (embed + upsert into `docs`)
-2. Add route handler in `worker.js` for `/{ns}/{key}`
-3. `/search?ns={ns}` works automatically - `searchHybrid()` is generic
-
-## Bindings (wrangler.toml)
-
-```toml
-[[hyperdrive]]      # HYPERDRIVE - Postgres connection pool
-[ai]                # AI - Workers AI (query embedding)
-```
+No KV. No separate vector store. All routes hit the same `docs` table.
 
 ## Postgres schema
 
@@ -81,6 +86,7 @@ CREATE TABLE docs (
   categories    TEXT[],
   aliases       TEXT[],
   module        TEXT,
+  scraped_at    TIMESTAMPTZ DEFAULT now(),
   PRIMARY KEY (ns, key)
 );
 CREATE INDEX docs_vec_func_idx  ON docs USING hnsw (vec_func vector_cosine_ops);
@@ -92,14 +98,32 @@ Full schema: `db/schema.sql`
 
 ## Performance (observed)
 
-| Path | p50 |
+| path | p50 |
 |------|-----|
 | Exact lookup | ~80-120ms |
 | Hybrid search | ~80-120ms |
-| Workers AI embed | ~30ms (included above) |
+| Workers AI embed (included above) | ~30ms |
+
+## Adding a namespace
+
+1. Clone vendor docs → `climan-namespaces/{ns}-namespace/corpus/vendor/`
+2. Copy `seed_az.py`, adapt `parse_{ns}()` for the source format
+3. Run `seed_{ns}.py` - embeds + upserts into `docs`
+4. Add one line to `NS_CONFIG` in `worker.js`
+5. Deploy
+
+See [`decisions.md`](decisions.md) for storage backend choice, dual-vector design, threshold tuning, and null byte handling.
+
+## Bindings (wrangler.toml)
+
+```toml
+[[hyperdrive]]   # HYPERDRIVE - Postgres connection pool via Cloudflare
+[ai]             # AI - Workers AI for query-time embedding
+```
 
 ## Related
 
 - [Search](search.md)
+- [Decisions](decisions.md)
 - [Pitfalls](pitfalls.md)
 - [Security](security.md)

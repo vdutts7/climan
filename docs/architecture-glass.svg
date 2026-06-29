@@ -278,89 +278,89 @@ text, tspan { font-family: 'JetBrains Mono', monospace; }
   <line class="vt-diagram-edge" x1="565" y1="322" x2="605" y2="322"/>
   <line class="vt-diagram-edge" x1="765" y1="322" x2="805" y2="322"/>
   <g id="vt-diagram-flow-sequence">
-    <animate id="vt-flow-cycle" attributeName="opacity" from="1" to="1" dur="2.65s" begin="0s;vt-flow-cycle.end"/>
+    <animate id="vt-flow-cycle" attributeName="opacity" from="1" to="1" dur="3.313s" begin="0s;vt-flow-cycle.end"/>
     <text class="vt-diagram-flow-status" x="485" y="654" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="16px" font-weight="500">climan.dev pipeline idle
-      <animate attributeName="opacity" values="0.75;0.75;0;0;0.75" keyTimes="0;0.113208;0.113208;0.716981;1" dur="2.65s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.75;0.75;0;0;0.75" keyTimes="0;0.11319;0.11319;0.716873;1" dur="3.313s" repeatCount="indefinite"/>
     </text>
     <g id="vt-flow-edge-active-0" opacity="0">
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.113208;0.113962;0.308679;0.309434;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.11319;0.113794;0.308784;0.309387;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
     <line class="vt-diagram-edge-active--success" x1="405" y1="202" x2="405" y2="242"/>
     </g>
     <g id="vt-flow-edge-active-1" opacity="0">
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.309434;0.310189;0.444528;0.445283;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.309387;0.309991;0.444612;0.445216;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
     <line class="vt-diagram-edge-active--success" x1="205" y1="322" x2="245" y2="322"/>
     </g>
     <g id="vt-flow-edge-active-2" opacity="0">
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.445283;0.446038;0.580377;0.581132;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.445216;0.445819;0.580441;0.581044;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
     <line class="vt-diagram-edge-active--success" x1="565" y1="322" x2="605" y2="322"/>
     </g>
     <g id="vt-flow-edge-active-3" opacity="0">
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.581132;0.581887;0.716226;0.716981;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.581044;0.581648;0.716269;0.716873;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
     <line class="vt-diagram-edge-active--success" x1="765" y1="322" x2="805" y2="322"/>
     </g>
     <g id="vt-flow-edge-lit-0" opacity="0">
-      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.113208;0.115208;0.998;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.11319;0.11519;0.998;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
     <line class="vt-diagram-edge-lit--success" x1="405" y1="202" x2="405" y2="242"/>
     </g>
     <g id="vt-flow-edge-lit-1" opacity="0">
-      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.309434;0.311434;0.998;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.309387;0.311387;0.998;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
     <line class="vt-diagram-edge-lit--success" x1="205" y1="322" x2="245" y2="322"/>
     </g>
     <g id="vt-flow-edge-lit-2" opacity="0">
-      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.445283;0.447283;0.998;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.445216;0.447216;0.998;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
     <line class="vt-diagram-edge-lit--success" x1="565" y1="322" x2="605" y2="322"/>
     </g>
     <g id="vt-flow-edge-lit-3" opacity="0">
-      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.581132;0.583132;0.998;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.581044;0.583044;0.998;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
     <line class="vt-diagram-edge-lit--success" x1="765" y1="322" x2="805" y2="322"/>
     </g>
     <g id="vt-flow-card-lit-0" opacity="0">
-      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.113208;0.115208;0.998;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.11319;0.11519;0.998;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
       <rect class="vt-diagram-flow-card-lit--success" x="245" y="42" width="320" height="160" rx="15"/>
     </g>
     <g id="vt-flow-card-lit-2" opacity="0">
-      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.113208;0.115208;0.998;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.11319;0.11519;0.998;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
       <rect class="vt-diagram-flow-card-lit--success" x="245" y="242" width="320" height="160" rx="15"/>
     </g>
     <g id="vt-flow-card-lit-1" opacity="0">
-      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.309434;0.311434;0.998;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.309387;0.311387;0.998;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
       <rect class="vt-diagram-flow-card-lit--success" x="45" y="242" width="160" height="360" rx="15"/>
     </g>
     <g id="vt-flow-card-lit-3" opacity="0">
-      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.445283;0.447283;0.998;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.445216;0.447216;0.998;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
       <rect class="vt-diagram-flow-card-lit--success" x="605" y="242" width="160" height="360" rx="15"/>
     </g>
     <g id="vt-flow-card-lit-4" opacity="0">
-      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.581132;0.583132;0.998;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.581044;0.583044;0.998;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
       <rect class="vt-diagram-flow-card-lit--success" x="805" y="242" width="160" height="360" rx="15"/>
     </g>
     <circle r="5" fill="#4ade80" filter="url(#vt-diagram-glow-soft)" opacity="0">
-      <animate attributeName="opacity" values="0;0;0.95;0.95;0;0" keyTimes="0;0.113208;0.113962;0.308679;0.309434;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
-      <animateMotion dur="0.4s" repeatCount="indefinite" path="M 405,202 L 405,242"/>
+      <animate attributeName="opacity" values="0;0;0.95;0.95;0;0" keyTimes="0;0.11319;0.113794;0.308784;0.309387;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animateMotion dur="0.5s" repeatCount="indefinite" path="M 405,202 L 405,242"/>
     </circle>
     <text class="vt-diagram-flow-status vt-diagram-flow-status-active--success" x="485" y="654" text-anchor="middle" opacity="0" font-family="JetBrains Mono, monospace" font-size="16px" font-weight="500">Workers AI - embed · search → CF Worker
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.113208;0.113962;0.308679;0.309434;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.11319;0.113794;0.308784;0.309387;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
     </text>
     <circle r="5" fill="#4ade80" filter="url(#vt-diagram-glow-soft)" opacity="0">
-      <animate attributeName="opacity" values="0;0;0.95;0.95;0;0" keyTimes="0;0.309434;0.310189;0.444528;0.445283;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
-      <animateMotion dur="0.4s" repeatCount="indefinite" path="M 205,322 L 245,322"/>
+      <animate attributeName="opacity" values="0;0;0.95;0.95;0;0" keyTimes="0;0.309387;0.309991;0.444612;0.445216;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animateMotion dur="0.5s" repeatCount="indefinite" path="M 205,322 L 245,322"/>
     </circle>
     <text class="vt-diagram-flow-status vt-diagram-flow-status-active--success" x="485" y="654" text-anchor="middle" opacity="0" font-family="JetBrains Mono, monospace" font-size="16px" font-weight="500">curl climan.dev/pwsh/gci - exact lookup request
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.309434;0.310189;0.444528;0.445283;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.309387;0.309991;0.444612;0.445216;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
     </text>
     <circle r="5" fill="#4ade80" filter="url(#vt-diagram-glow-soft)" opacity="0">
-      <animate attributeName="opacity" values="0;0;0.95;0.95;0;0" keyTimes="0;0.445283;0.446038;0.580377;0.581132;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
-      <animateMotion dur="0.4s" repeatCount="indefinite" path="M 565,322 L 605,322"/>
+      <animate attributeName="opacity" values="0;0;0.95;0.95;0;0" keyTimes="0;0.445216;0.445819;0.580441;0.581044;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animateMotion dur="0.5s" repeatCount="indefinite" path="M 565,322 L 605,322"/>
     </circle>
     <text class="vt-diagram-flow-status vt-diagram-flow-status-active--success" x="485" y="654" text-anchor="middle" opacity="0" font-family="JetBrains Mono, monospace" font-size="16px" font-weight="500">CF Worker → Azure Postgres SELECT via pgvector
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.445283;0.446038;0.580377;0.581132;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.445216;0.445819;0.580441;0.581044;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
     </text>
     <circle r="5" fill="#4ade80" filter="url(#vt-diagram-glow-soft)" opacity="0">
-      <animate attributeName="opacity" values="0;0;0.95;0.95;0;0" keyTimes="0;0.581132;0.581887;0.716226;0.716981;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
-      <animateMotion dur="0.4s" repeatCount="indefinite" path="M 765,322 L 805,322"/>
+      <animate attributeName="opacity" values="0;0;0.95;0.95;0;0" keyTimes="0;0.581044;0.581648;0.716269;0.716873;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animateMotion dur="0.5s" repeatCount="indefinite" path="M 765,322 L 805,322"/>
     </circle>
     <text class="vt-diagram-flow-status vt-diagram-flow-status-active--success" x="485" y="654" text-anchor="middle" opacity="0" font-family="JetBrains Mono, monospace" font-size="16px" font-weight="500">JSON 200 OK - authoritative doc payload returned
-      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.581132;0.581887;0.716226;0.716981;1" dur="2.65s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.581044;0.581648;0.716269;0.716873;1" dur="3.313s" repeatCount="indefinite" begin="0s;vt-flow-cycle.begin"/>
     </text>
   </g>
 </svg>

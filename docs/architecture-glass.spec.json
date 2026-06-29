@@ -5,6 +5,15 @@
   "flow": {
     "state": "success",
     "idle_text": "climan.dev pipeline idle",
+    "timing": {
+      "_note": "20% slower than visual-tokens defaults (duration x1.25); consumer-only",
+      "start_delay_s": 0.375,
+      "particle_motion_dur_s": 0.5,
+      "first_hops_at_ms": 650,
+      "later_hops_at_ms": 450,
+      "loop_pause_s": 0.688,
+      "restart_delay_ms": 250
+    },
     "hops": [
       { "edge": 0, "text": "Workers AI - embed · search → CF Worker" },
       { "edge": 1, "text": "curl climan.dev/pwsh/gci - exact lookup request" },
