@@ -5,8 +5,8 @@
 </p>
 <h1 align="center">climan(.dev)</h1>
 <p align="center"><a href="https://vdutts7.github.io/climan/">vdutts7.github.io/climan/</a></p>
-<p align="center">curl-able CLI truth for agents → <a href="https://climan.dev">climan.dev</a></p>
-<p align="center">hybrid semantic search; no API key- just curl</p>
+<p align="center">curl-able CLI truth for agents- no API key</p>
+<p align="center">hybrid semantic search; just curl</p>
 
 ---
 

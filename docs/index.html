@@ -297,29 +297,18 @@
     }
     .skill-pill-wrap {
       position: relative;
+      display: inline-block;
     }
-    .skill-pill-wrap .btn-p {
-      cursor: pointer;
-      border: none;
-      appearance: none;
-      -webkit-appearance: none;
+    /* fused shell - spoonfeeder slash picker + input bar */
+    .skill-pill-shell {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: stretch;
+      border-radius: 999px;
+      transition: border-radius 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
     }
-    .skill-pill-wrap .btn-p[aria-expanded="true"] {
-      border-color: rgba(255,255,255,0.28);
-      background: rgba(12, 12, 18, 0.92);
-    }
-    /* spoonfeeder/docs/ui - ChatSidebar glassy dropdown */
-    .skill-pill-drop {
-      position: absolute;
-      left: 0;
-      top: calc(100% + 4px);
-      z-index: 1000;
-      pointer-events: none;
-    }
-    .skill-pill-wrap.open .skill-pill-drop {
-      pointer-events: auto;
-    }
-    .skill-pill-drop::before {
+    .skill-pill-shell::before {
       content: "";
       position: absolute;
       width: var(--glass-glow-size);
@@ -335,29 +324,49 @@
       transition: opacity 0.3s ease;
       pointer-events: none;
     }
-    .skill-pill-wrap.open .skill-pill-drop::before {
-      opacity: var(--glass-glow-opacity);
-    }
-    .skill-pill-menu {
-      position: relative;
-      min-width: 168px;
-      padding: 0;
+    .skill-pill-wrap.open .skill-pill-shell {
       border-radius: 12px;
-      background-color: var(--glass-dropdown-bg);
+      background: var(--glass-dropdown-bg);
       backdrop-filter: var(--glass-dropdown-blur);
       -webkit-backdrop-filter: var(--glass-dropdown-blur);
       border: 1px solid var(--glass-dropdown-border);
       box-shadow: var(--glass-shadow);
+      animation: skillShellIn 0.15s ease-out;
+    }
+    .skill-pill-wrap.open .skill-pill-shell::before {
+      opacity: var(--glass-glow-opacity);
+    }
+    @keyframes skillShellIn {
+      from { opacity: 0.85; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .skill-pill-wrap .btn-p {
+      cursor: pointer;
+      border: none;
+      appearance: none;
+      -webkit-appearance: none;
+      width: 100%;
+    }
+    .skill-pill-wrap.open .btn-p {
+      border-radius: 11px 11px 0 0;
+      background: transparent;
+      box-shadow: none;
+      transform: none;
+    }
+    .skill-pill-wrap.open .btn-p:hover {
+      background: rgba(255, 255, 255, 0.04);
+      transform: none;
+    }
+    .skill-pill-menu {
+      display: none;
+      min-width: 100%;
+      padding: 0;
       overflow: hidden;
-      opacity: 0;
-      visibility: hidden;
-      transform: scale(0.95) translateY(-4px);
-      transition: all 0.15s ease;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0 0 11px 11px;
     }
     .skill-pill-wrap.open .skill-pill-menu {
-      opacity: 1;
-      visibility: visible;
-      transform: scale(1) translateY(0);
+      display: block;
     }
     .skill-pill-item {
       display: flex;
@@ -372,13 +381,9 @@
       color: rgba(255, 255, 255, 0.85);
       transition: background-color 0.075s ease;
     }
-    .skill-pill-item:first-child {
-      border-top-left-radius: 12px;
-      border-top-right-radius: 12px;
-    }
     .skill-pill-item:last-child {
-      border-bottom-left-radius: 12px;
-      border-bottom-right-radius: 12px;
+      border-bottom-left-radius: 11px;
+      border-bottom-right-radius: 11px;
     }
     .skill-pill-item:hover {
       background: var(--glass-bg-hover);
@@ -772,12 +777,12 @@
     <!-- F4 + F6: glass, no "skill" word -->
     <div class="btns">
       <div class="skill-pill-wrap" id="skill-pill">
-        <button type="button" class="btn-p" aria-expanded="false" aria-haspopup="true" aria-controls="skill-pill-menu" id="skill-pill-btn">
-          <img src="https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/claude.webp"
-               width="16" height="16" style="border-radius:3px;flex-shrink:0" alt="" />
-          /climan
-        </button>
-        <div class="skill-pill-drop">
+        <div class="skill-pill-shell">
+          <button type="button" class="btn-p" aria-expanded="false" aria-haspopup="true" aria-controls="skill-pill-menu" id="skill-pill-btn">
+            <img src="https://raw.githubusercontent.com/vdutts7/squircle/refs/heads/main/webp/claude.webp"
+                 width="16" height="16" style="border-radius:3px;flex-shrink:0" alt="" />
+            /climan
+          </button>
           <div class="skill-pill-menu" id="skill-pill-menu" role="menu" aria-label="/climan actions">
             <a href="https://github.com/vdutts7/climan" target="_blank" rel="noopener" class="skill-pill-item" role="menuitem">
               <span class="skill-pill-item-icon" aria-hidden="true">
