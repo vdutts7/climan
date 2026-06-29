@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 970 682.0" font-family="JetBrains Mono, monospace">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1010 682.0" font-family="JetBrains Mono, monospace">
 <style>
 /* JetBrains Mono - embedded for standalone SVG (object/img); no @import */
 @font-face {
@@ -181,10 +181,10 @@ text, tspan { font-family: 'JetBrains Mono', monospace; }
   </defs>
   <!-- vt-gcard diagram - card content owned by consumer spec -->
   <g id="canvas" aria-hidden="true">
-    <rect width="970" height="682.0" rx="10" fill="#0b0c12"/>
-    <rect width="970" height="682.0" rx="10" fill="url(#vt-diagram-canvas-vignette)" opacity="0.85"/>
-    <rect width="970" height="682.0" rx="10" fill="url(#vt-diagram-canvas-glass)" opacity="0.7"/>
-    <rect width="970" height="682.0" rx="10" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+    <rect width="1010" height="682.0" rx="10" fill="#0b0c12"/>
+    <rect width="1010" height="682.0" rx="10" fill="url(#vt-diagram-canvas-vignette)" opacity="0.85"/>
+    <rect width="1010" height="682.0" rx="10" fill="url(#vt-diagram-canvas-glass)" opacity="0.7"/>
+    <rect width="1010" height="682.0" rx="10" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
   </g>
   <g class="vt-gcard--satellite">
     <rect class="vt-gcard-outer" x="245" y="42" width="320" height="160" rx="15"/>
