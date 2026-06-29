@@ -15,7 +15,9 @@
 
 ## Problem
 
-Agents hallucinate CLI flags. Training data drifts. Vendor docs are authoritative but unreachable from agent sandboxes at query time.
+- agents hallucinate CLI flags
+- training data drifts
+- vendor docs are authoritative but unreachable from agent sandboxes at query time
 
 | failure | symptom |
 |---|---|
@@ -73,24 +75,26 @@ Hybrid BM25 + dual-vector cosine over Postgres. Two vectors per record:
 
 Score: `BM25 × 0.3 + GREATEST(vec_func, vec_flags) × 0.7`
 
-Model: `@cf/baai/bge-base-en-v1.5` (768d, `pooling=cls`) - same model at seed time and query time.
+Model:
+-  `@cf/baai/bge-base-en-v1.5` (768d, `pooling=cls`)
+- same model at seed time and query time.
 
 ## Adding a namespace
 
-1. Clone vendor docs → `climan-namespaces/{ns}-namespace/corpus/vendor/`
-2. Copy `seed_az.py`, adapt `parse_{ns}()` for the source format
-3. Run `seed_{ns}.py` - embeds + upserts into `docs`
-4. Add one line to `NS_CONFIG` in `worker.js`
-5. Deploy - `/search?ns={ns}` works automatically
+1. clone vendor docs → `climan-namespaces/{ns}-namespace/corpus/vendor/`
+2. copy `seed_az.py`, adapt `parse_{ns}()` for the source format
+3. run `seed_{ns}.py` - embeds + upserts into `docs`
+4. add one line to `NS_CONFIG` in `worker.js`
+5. deploy - `/search?ns={ns}` works automatically
 
-See [`docs/decisions.md`](docs/decisions.md) for why each architectural choice was made.
+See [`docs/decisions.md`](docs/decisions.md)
 
 ## Setup
 
 ```bash
 npm install
 pip install psycopg2-binary requests pyyaml
-cp .env.example .env   # CF_ACCOUNT, CF_TOKEN, PGPASSWORD
+cp .env.example .env 
 psql "$PGCONN" -f db/schema.sql
 npx wrangler deploy
 ```
@@ -100,6 +104,7 @@ npx wrangler deploy
 <img src="https://img.shields.io/badge/Cloudflare%20Workers-F38020?style=for-the-badge&logo=cloudflare&logoColor=white" alt="Cloudflare Workers"/>
 <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
 <img src="https://img.shields.io/badge/pgvector-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="pgvector"/>
+<img src="https://img.shields.io/badge/BM25-full--text%20search-64748B?style=for-the-badge" alt="BM25"/>
 
 ## Contact
 
