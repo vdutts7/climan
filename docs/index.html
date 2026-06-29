@@ -47,6 +47,10 @@
       --glass-pill-border:      rgba(255, 255, 255, 0.12);
       --glass-pill-active-bg:   rgba(255, 255, 255, 0.11);
       --glass-pill-active-border: rgba(255, 255, 255, 0.28);
+      --glass-bg-hover:           rgba(255, 255, 255, 0.1);
+      --glass-dropdown-bg:        rgba(59, 59, 59, 0.4);
+      --glass-dropdown-border:    rgba(82, 82, 82, 0.5);
+      --glass-dropdown-blur:      blur(30px);
       /* backdrops - registry/backdrops/manifest.json */
       --backdrop-grid-size: 56px;
       --backdrop-grid-line: rgba(255, 255, 255, 0.028);
@@ -188,7 +192,7 @@
     }
     .wrap a, .wrap button, .wrap .btn-p, .wrap .btn-g,
     .wrap .cp-card, .wrap .cp-copy-hint, .wrap .demo-block,
-    .wrap .skill-pill-wrap, .wrap .skill-pill-menu a {
+    .wrap .skill-pill-wrap, .wrap .skill-pill-shell, .wrap .skill-pill-item {
       pointer-events: auto;
     }
 
@@ -304,51 +308,96 @@
       border-color: rgba(255,255,255,0.28);
       background: rgba(12, 12, 18, 0.92);
     }
-    .skill-pill-menu {
+    /* spoonfeeder/docs/ui - ChatSidebar glassy dropdown */
+    .skill-pill-drop {
       position: absolute;
-      top: calc(100% + 8px);
       left: 0;
+      top: calc(100% + 4px);
+      z-index: 1000;
+      pointer-events: none;
+    }
+    .skill-pill-wrap.open .skill-pill-drop {
+      pointer-events: auto;
+    }
+    .skill-pill-drop::before {
+      content: "";
+      position: absolute;
+      width: var(--glass-glow-size);
+      height: var(--glass-glow-size);
+      background: var(--glass-glow-color);
+      border-radius: 50%;
+      z-index: -1;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      filter: blur(var(--glass-glow-blur));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .skill-pill-wrap.open .skill-pill-drop::before {
+      opacity: var(--glass-glow-opacity);
+    }
+    .skill-pill-menu {
+      position: relative;
       min-width: 168px;
-      padding: 6px;
-      border-radius: 10px;
-      background: rgba(8, 8, 12, 0.94);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      padding: 0;
+      border-radius: 12px;
+      background-color: var(--glass-dropdown-bg);
+      backdrop-filter: var(--glass-dropdown-blur);
+      -webkit-backdrop-filter: var(--glass-dropdown-blur);
+      border: 1px solid var(--glass-dropdown-border);
+      box-shadow: var(--glass-shadow);
+      overflow: hidden;
       opacity: 0;
       visibility: hidden;
-      transform: translateY(-4px);
-      transition: opacity .15s ease, transform .15s ease, visibility .15s;
-      z-index: 40;
+      transform: scale(0.95) translateY(-4px);
+      transition: all 0.15s ease;
     }
     .skill-pill-wrap.open .skill-pill-menu {
       opacity: 1;
       visibility: visible;
-      transform: translateY(0);
+      transform: scale(1) translateY(0);
     }
-    .skill-pill-menu a {
+    .skill-pill-item {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 9px 12px;
-      border-radius: 7px;
+      gap: 12px;
+      width: 100%;
+      padding: 10px 16px;
+      border-radius: 0;
       font-family: var(--mono);
-      font-size: 11.5px;
+      font-size: 12px;
       font-weight: 500;
-      color: var(--txt);
-      transition: background .12s, color .12s;
+      color: rgba(255, 255, 255, 0.85);
+      transition: background-color 0.075s ease;
     }
-    .skill-pill-menu a:hover {
-      background: rgba(255, 255, 255, 0.08);
+    .skill-pill-item:first-child {
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+    .skill-pill-item:last-child {
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+    }
+    .skill-pill-item:hover {
+      background: var(--glass-bg-hover);
       color: #fff;
     }
-    .skill-pill-menu a svg {
-      flex-shrink: 0;
-      color: rgba(255, 255, 255, 0.5);
+    .skill-pill-item:active {
+      background: rgba(255, 255, 255, 0.15);
     }
-    .skill-pill-menu a:hover svg {
-      color: rgba(255, 255, 255, 0.85);
+    .skill-pill-item-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      opacity: 0.8;
+    }
+    .skill-pill-item:hover .skill-pill-item-icon {
+      opacity: 1;
     }
     .btn-g {
       display: flex; align-items: center; gap: 8px;
@@ -728,11 +777,15 @@
                width="16" height="16" style="border-radius:3px;flex-shrink:0" alt="" />
           /climan
         </button>
-        <div class="skill-pill-menu" id="skill-pill-menu" role="menu" aria-label="/climan actions">
-          <a href="https://github.com/vdutts7/climan" target="_blank" rel="noopener" role="menuitem">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            view skill
-          </a>
+        <div class="skill-pill-drop">
+          <div class="skill-pill-menu" id="skill-pill-menu" role="menu" aria-label="/climan actions">
+            <a href="https://github.com/vdutts7/climan" target="_blank" rel="noopener" class="skill-pill-item" role="menuitem">
+              <span class="skill-pill-item-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </span>
+              view skill
+            </a>
+          </div>
         </div>
       </div>
       <button type="button" class="btn-g hero-curl-copy" aria-label="Copy curl command to clipboard" data-copy="curl -s climan.dev/pwsh/gci | jq '.'">
