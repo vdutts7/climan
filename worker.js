@@ -78,7 +78,7 @@ export default {
     // ── /search ───────────────────────────────────────────────────────────────
     if (path === "/search") {
       const q   = (url.searchParams.get("q") || "").trim();
-      const ns  = (url.searchParams.get("ns") || "pwsh").toLowerCase();
+      const ns  = (url.searchParams.get("ns") || "all").toLowerCase();
       const cat = url.searchParams.get("cat") || null;
       if (!q) return new Response('{"error":"missing q param"}', { status: 400, headers: HEADERS });
       const qSafe = q.replace(/[|&!():*]/g, " ").trim();
@@ -165,7 +165,7 @@ async function searchHybrid(q, qSafe, ns, cat, env) {
               coalesce(embed_func,'') || ' ' ||
               coalesce(embed_flags,'')
             ),
-            plainto_tsquery(${qSafe})
+            websearch_to_tsquery(${qSafe})
           ) * ${BM25_WEIGHT} +
           GREATEST(
             (1 - (vec_func  <=> ${vecStr}::vector)),
@@ -181,7 +181,7 @@ async function searchHybrid(q, qSafe, ns, cat, env) {
             coalesce(key,'') || ' ' ||
             coalesce(embed_func,'') || ' ' ||
             coalesce(embed_flags,'')
-          ) @@ plainto_tsquery(${qSafe})
+          ) @@ websearch_to_tsquery(${qSafe})
           OR (vec_func  <=> ${vecStr}::vector) < ${VEC_THRESHOLD}
           OR (vec_flags <=> ${vecStr}::vector) < ${VEC_THRESHOLD}
         )
