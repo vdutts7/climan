@@ -5,7 +5,7 @@
 </p>
 <h1 align="center">climan</h1>
 <p align="center">curl-able CLI truth for agents → <a href="https://climan.dev">climan.dev</a></p>
-<p align="center">no API key · just curl · hybrid semantic search</p>
+<p align="center">hybrid semantic search; no API key- just curl</p>
 
 ---
 
