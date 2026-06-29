@@ -6,18 +6,18 @@ LLMs hallucinate CLI flags and syntax. Training data drifts; vendor documentatio
 
 ## Design
 
-```
+```text
 climan.dev/{namespace}/{key}
 ```
 
-- **namespace** routes to a corpus (`/pwsh`, `/kusto`, `/az`, ...)
-- **exact lookups** → Azure Postgres via Hyperdrive (~80-120ms)
-- **hybrid search** → same Postgres path, BM25 + dual-vector cosine
-- **no auth on read path**; operator credentials only for seed/deploy
+1. **namespace** routes to a corpus (`/pwsh`, `/kusto`, `/az`, ...)
+2. **exact lookups** → Azure Postgres via Hyperdrive (~80-120ms)
+3. **hybrid search** → same Postgres path, BM25 + dual-vector cosine
+4. **no auth on read path**; operator credentials only for seed/deploy
 
-## Request flow - exact lookup
+## Request flow- exact lookup
 
-```
+```text
 GET /pwsh/Get-ChildItem
   → Worker → Hyperdrive → Postgres SELECT content WHERE ns='pwsh' AND key ILIKE $1 → JSONB
 
@@ -25,9 +25,9 @@ GET /az/vm/create
   → Worker → key = "az " + "vm create" → Postgres SELECT content WHERE ns='az' AND key = $1 → JSONB
 ```
 
-## Request flow - hybrid search
+## Request flow- hybrid search
 
-```
+```text
 GET /search?q=scale+down+kubernetes+nodes&ns=az
   → Worker
     → Workers AI: embed query → float[768] (bge-base-en-v1.5, cls pooling)
@@ -57,7 +57,7 @@ const NS_CONFIG = {
 `keyPrefix` handles namespaces where the DB key includes the binary name (`az vm create`).
 `aliasCol` enables alias resolution (`gci` → `Get-ChildItem`).
 
-`/search?ns={ns}` works automatically for any seeded namespace - no worker changes needed.
+`/search?ns={ns}` works automatically for any seeded namespace- no worker changes needed.
 
 ## Storage
 
@@ -108,11 +108,11 @@ Full schema: `db/schema.sql`
 
 1. Clone vendor docs → `climan-namespaces/{ns}-namespace/corpus/vendor/`
 2. Copy `seed_az.py`, adapt `parse_{ns}()` for the source format
-3. Run `seed_{ns}.py` - embeds + upserts into `docs`
+3. Run `seed_{ns}.py`- embeds + upserts into `docs`
 4. Add one line to `NS_CONFIG` in `worker.js`
 5. Deploy
 
-See [`decisions.md`](decisions.md) for storage backend choice, dual-vector design, threshold tuning, and null byte handling.
+See [`decisions.md`](decisions%2Emd) for storage backend choice, dual-vector design, threshold tuning, and null byte handling.
 
 ## Bindings (wrangler.toml)
 
@@ -123,7 +123,4 @@ See [`decisions.md`](decisions.md) for storage backend choice, dual-vector desig
 
 ## Related
 
-- [Search](search.md)
-- [Decisions](decisions.md)
-- [Pitfalls](pitfalls.md)
-- [Security](security.md)
+[`search.md`](search%2Emd), [`decisions.md`](decisions%2Emd), [`pitfalls.md`](pitfalls%2Emd), [`security.md`](security%2Emd)

@@ -2,14 +2,14 @@
 
 ## Climan skill (umbrella)
 
-One skill bundle, namespace branches inside it. Agents load the branch they need - not a mega-skill for every corpus.
+One skill bundle, namespace branches inside it. Agents load the branch they need- not a mega-skill for every corpus.
 
 | piece | role |
 |-------|------|
-| **climan skill** | fetch live CLI docs from `climan.dev/{ns}/{key}` |
-| **`fetch.sh` cascade** | curl → wget → python → node; exit 2 = egress proxy block |
-| **primary URL** | `https://climan.dev` |
-| **fallback URL** | `https://manpages.manpages.workers.dev` (blocked on some agent hosts) |
+| climan skill | fetch live CLI docs from `climan.dev/{ns}/{key}` |
+| `fetch.sh` cascade | curl → wget → python → node; exit 2 = egress proxy block |
+| primary URL | `https://climan.dev` |
+| fallback URL | `https://manpages.manpages.workers.dev` (blocked on some agent hosts) |
 
 Agent flow:
 
@@ -28,7 +28,7 @@ user asks about PowerShell task
 | exact lookup | `GET /pwsh/Get-ChildItem` |
 | alias | `GET /pwsh/gci` |
 | search | `GET /search?q=kill+process&ns=pwsh` |
-| manifest | `GET /pwsh` - all 302 cmdlets |
+| manifest | `GET /pwsh`- all 302 cmdlets |
 
 Search-first pattern for natural language:
 
@@ -44,7 +44,7 @@ Some agent containers block `*.workers.dev` at the egress proxy (`403 host_not_a
 
 If `fetch.sh` exits 2: ask user to curl locally and paste JSON. Do not hallucinate fallback content.
 
--> [`egress-proxy.md`](egress-proxy.md)
+-> [`egress-proxy.md`](egress-proxy%2Emd)
 
 ## Future namespace branches
 
@@ -52,15 +52,15 @@ Each namespace gets a branch in the climan skill when the corpus ships.
 
 | branch | source | skill route | status |
 |--------|--------|-------------|--------|
-| `/pwsh` | PowerShell 7.4 docs (MicrosoftDocs + Get-Help) | `/pwsh` | **live** - 302 cmdlets, hybrid search |
+| `/pwsh` | PowerShell 7.4 docs (MicrosoftDocs + Get-Help) | `/pwsh` | live- 302 cmdlets, hybrid search |
 
-**`/pwsh` not `/ps` in docs/skill naming** - `ps` is POSIX process status. API alias route `/ps/{cmdlet}` exists for convenience.
+`/pwsh` not `/ps` in docs/skill naming- `ps` is POSIX process status. API alias route `/ps/{cmdlet}` exists for convenience.
 
 Worker pattern per branch:
 
 ```text
 climan.dev/{ns}/{key} -> Hyperdrive -> Postgres docs WHERE ns='{ns}'
-/search?ns={ns}       -> searchHybrid() - generic, works once seeded
+/search?ns={ns}       -> searchHybrid()- generic, works once seeded
 ```
 
 ## Operator refresh cadence

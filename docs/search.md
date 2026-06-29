@@ -24,9 +24,9 @@ curl "https://climan.dev/search?q=kill+a+process+by+name&ns=pwsh"
 |-------|------------|-------|
 | kill a process by name | Stop-Process | 0.76 |
 | find files recursively | Get-ChildItem | 0.44 |
-| download file from url | Invoke-WebRequest | - |
+| download file from url | Invoke-WebRequest | n/a |
 
-Score guide: **>0.7** high confidence single answer · **0.4-0.7** right category, may need disambiguation · **<0.4** weak
+Score guide: >0.7 high confidence single answer · 0.4-0.7 right category, may need disambiguation · <0.4 weak
 
 ## How it works
 
@@ -34,8 +34,8 @@ Score guide: **>0.7** high confidence single answer · **0.4-0.7** right categor
 
 Every pwsh record gets two embed strings and two vectors:
 
-- **`embed_func`** - what the cmdlet does: name, description, module, categories
-- **`embed_flags`** - how to use it: parameter names, types, markdown descriptions
+1. `embed_func`- what the cmdlet does: name, description, module, categories
+2. `embed_flags`- how to use it: parameter names, types, markdown descriptions
 
 Both embedded via Workers AI `@cf/baai/bge-base-en-v1.5` (768d, `pooling=cls`) in `seed_pwsh.py`.
 
@@ -76,20 +76,20 @@ The `OR` condition pulls candidates from keyword match or either vector. Weighte
 
 ### Model consistency
 
-Build-time and query-time **must use the same model and pooling**:
+Build-time and query-time must use the same model and pooling:
 
-- model: `@cf/baai/bge-base-en-v1.5` (768 dims)
-- pooling: `cls`
+1. model: `@cf/baai/bge-base-en-v1.5` (768 dims)
+2. pooling: `cls`
 
-Different model or pooling → re-embed entire corpus.
+Different model or pooling -> re-embed entire corpus.
 
 ## Agent usage pattern
 
-```
+```text
 GET /search?q={natural_language_task}&ns=pwsh  →  results[0].key  →  GET /pwsh/{key}
 ```
 
-Example: `kill a process by name` → `Stop-Process` → full record with parameters, examples, see_also.
+Example: `kill a process by name` -> `Stop-Process` -> full record with parameters, examples, see_also.
 
 ## Query params
 
@@ -109,10 +109,8 @@ curl https://climan.dev/pwsh/gci          # alias
 curl https://climan.dev/pwsh/get-childitem  # case-insensitive
 ```
 
-Returns full `content` JSONB - description, parameters, examples, aliases.
+Returns full `content` JSONB- description, parameters, examples, aliases.
 
 ## Related
 
-- [`architecture.md`](architecture.md) - request flows
-- [`egress-proxy.md`](egress-proxy.md) - agent container fetch issues
-- [`skills-roadmap.md`](skills-roadmap.md) - climan skill branches
+[`architecture.md`](architecture%2Emd), [`egress-proxy.md`](egress-proxy%2Emd), [`skills-roadmap.md`](skills-roadmap%2Emd)

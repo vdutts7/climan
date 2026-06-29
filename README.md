@@ -1,5 +1,7 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/powershell.webp" alt="powershell" width="80" height="80" />
+  <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/claude.webp" alt="claude" width="80" height="80" />
+  <img src="https://raw.githubusercontent.com/vdutts7/squircle/main/webp/microsoft-azure.webp" alt="azure" width="80" height="80" />
 </p>
 <h1 align="center">climan</h1>
 <p align="center">CLI documentation hub for AI agents at <a href="https://climan.dev">climan.dev</a></p>
